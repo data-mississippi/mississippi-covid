@@ -3,10 +3,6 @@ const csvToJSON = require('csvtojson')
 const csvFilterSort = require('csv-filter-sort');
 
 const getDataFromGithub = (date, state, sendData) => {
-  console.log(date)
-  console.log(state)
-
-
   const url = `https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/${date}.csv`
 
   request.get(url, (error, { body } = {}) => {
@@ -25,11 +21,6 @@ const createJSON = (csv, state, date, sendData) => {
       filterCriteria: state = state[0].toUpperCase() + state.substring(1),
       filterType: 'EXACT'
     }
-
-  
-  console.log(state)
-  console.log(filterOptions)
-  console.log(date)
 
   csvFilterSort.filter(csv, filterOptions, (error, filteredCSV) => {
     csvToJSON({
