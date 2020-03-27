@@ -4,7 +4,8 @@ counties.textContent = ''
 
 window.onload = function() {
   counties.innerHTML = '<p>loading...</p>'
-  fetch('http://localhost:3000/api/v1/daily?state=mississippi').then((response) => {
+  
+  fetch('/api/v1/daily?state=mississippi').then((response) => {
     response.json().then((data) => {
       counties.innerHTML = ''
       if (data.error) {
