@@ -38,9 +38,9 @@ app.get('/about', (req, res) => {
 })
 
 
-app.get('/help', (req, res) => {
-  res.render('help', {
-    title: 'help',
+app.get('/resources', (req, res) => {
+  res.render('resources', {
+    title: 'resources',
     helpText: 'Coronavirus outreach for Mississippi communities -- information and donate',
     name: 'sam mcalilly'
   })
@@ -133,13 +133,22 @@ app.get('/api', (req, res) => {
   })
 })
 
-app.get('/help/*', (req, res) => {
+app.get('/resources/*', (req, res) => {
   res.render('404', {
     title: '404',
     name: 'sam mcalilly',
     errorMessage: 'help article not found'
   })
 })
+
+app.get('/test', (req, res) => {
+  throw new Error('Something went wrong!');
+})
+
+app.use((error, req, res, next) => {
+  console.error(error.stack);
+  res.status(500).send('Something Broke!');
+ })
 
 app.get('*', (req, res) => {
   res.render('404', {
