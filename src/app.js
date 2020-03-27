@@ -41,7 +41,7 @@ app.get('/about', (req, res) => {
 app.get('/help', (req, res) => {
   res.render('help', {
     title: 'help',
-    helpText: 'this is some helpful text',
+    helpText: 'Coronavirus outreach for Mississippi communities -- information and donate',
     name: 'sam mcalilly'
   })
 })
@@ -52,6 +52,14 @@ app.get('/news', (req, res) => {
       title: 'news',
       feed: feed.items
     })
+  })
+})
+
+app.get('/news/rss', (req, res) => {
+  getMSTodayRSS((feed) => {
+    res.send(
+      feed
+    )
   })
 })
 
