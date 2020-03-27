@@ -23,7 +23,7 @@ app.use(express.static(PUBLIC_DIRECTORY));
 // configure the routes
 app.get('', (req, res) => {
   res.render('index', {
-    title: 'mississippi',
+    title: 'Mississippi COVID-19',
     name: 'sam mcalilly'
   })
 })
@@ -44,6 +44,39 @@ app.get('/help', (req, res) => {
     name: 'sam mcalilly'
   })
 })
+
+
+/**
+ * @swagger
+ * /api/v1/daily:
+ *   get:
+ *     summary: Get each county's daily case numbers
+ *     description: Returns a list of a state's daily case numbers for each county
+ *     tags:
+ *       - counties
+ *     parameters:
+ *       - in: query
+ *         name: state
+ *         type: string
+ *         required: true
+ *         enum:
+ *           - yes
+ *           - no
+ *       - in: query
+ *         name: date
+ *         type: 
+ *     responses:
+ *       200:
+ *         description: List of animals
+ *         schema:
+ *           type: object
+ *           properties:
+ *             animals:
+ *               type: array
+ *               description: all the animals
+ *               items:
+ *                 type: string
+ */
 
 
 app.get('/api/v1/daily', (req, res) => {
@@ -78,7 +111,7 @@ app.get('/api/v1/daily', (req, res) => {
 app.get('/api', (req, res) => {
   res.render('api', {
     title: 'api',
-    
+
   })
 })
 

@@ -12,6 +12,15 @@ window.onload = function() {
         counties.innerHTML = ''
         counties.innerHTML = data.error
       } else {
+        counties.innerHTML = ''
+
+        let date = `Mississippi cases as of ${data.daily.date}`
+        let dateHeader = document.createElement('h3')
+        dateHeader.id = 'counties-header'
+        let text = document.createTextNode(date)
+        dateHeader.appendChild(text);
+        counties.appendChild(dateHeader)
+
         let table = document.createElement('table');
         counties.appendChild(table)
 

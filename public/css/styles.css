@@ -32,10 +32,28 @@ header a {
   text-decoration: none;
 }
 
+footer a {
+  color: #add8e6;
+}
+
+table {
+  text-align: center;
+}
+
 .main-content {
   flex-grow: 1;
 }
 
 .portrait {
   width: 250px;
+}
+
+#counties {
+  display: flex;
+  flex-direction: column;
+  width: 60%;
+}
+
+#counties-header {
+  text-align: center;
 }
