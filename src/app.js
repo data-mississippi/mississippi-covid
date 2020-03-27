@@ -3,6 +3,7 @@ const express = require('express');
 var hbs = require('hbs');
 const getDataFromGithub = require('./utils/getDataFromGithub');
 const createDateForQuery = require('./utils/date');
+const getMSTodayRSS = require('./utils/getMSTodayRSS');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -42,6 +43,15 @@ app.get('/help', (req, res) => {
     title: 'help',
     helpText: 'this is some helpful text',
     name: 'sam mcalilly'
+  })
+})
+
+app.get('/news', (req, res) => {
+  getMSTodayRSS((feed) => {
+    res.render('news', {
+      title: 'news',
+      feed: feed.items
+    })
   })
 })
 

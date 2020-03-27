@@ -16,7 +16,8 @@
     "csvtojson": "^2.0.10",
     "express": "^4.17.1",
     "hbs": "^4.1.0",
-    "request": "^2.88.2"
+    "request": "^2.88.2",
+    "rss-parser": "^3.7.6"
   },
   "devDependencies": {
     "nodemon": "^2.0.2"

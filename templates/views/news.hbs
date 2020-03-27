@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <title>news</title>
+    <link rel="icon" href="/img/ms-outline.jpeg">
+    <link rel="stylesheet" href="./css/styles.css">
+  </head>
+
+  <body>
+    <div class="main-content">
+      {{> header}}
+      <div>
+        <h2>News from Mississippi Today</h2>
+        {{#each feed as |item|}}
+          <a href="{{item.link}}">{{item.title}}</p>
+        {{/each}}
+      </div>
+    </div>
+    
+    {{> footer }} 
+  </body>
+</html>
