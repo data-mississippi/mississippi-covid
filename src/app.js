@@ -75,6 +75,13 @@ app.get('/api/v1/daily', (req, res) => {
   })
 })
 
+app.get('/api', (req, res) => {
+  res.render('api', {
+    title: 'api',
+    
+  })
+})
+
 app.get('/help/*', (req, res) => {
   res.render('404', {
     title: '404',
