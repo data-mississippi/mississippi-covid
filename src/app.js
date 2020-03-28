@@ -82,6 +82,51 @@ app.get('/news/rss', (req, res) => {
   })
 })
 
+/**
+ * @swagger
+ * /api/v1/daily/us:
+ *   get:
+ *     summary: Get a list of US's daily case numbers
+ *     description: Returns a list of the US's daily case numbers. NOTE -- county data is not available before 03-23-2020, only state data.
+ *     parameters:
+ *       - in: query
+ *         name: date
+ *         type: string
+ *         required: true
+ *       - in: query
+ *         name: state
+ *         type: string
+ *         required: false
+ *     responses:
+ *       200:
+ *         description: List of the US's daily case numbers. Schema does not match what is currently returned.
+ *         schema: 
+ *           type: object
+ *           properties:
+ *             daily:
+ *               type: object
+ *               properties:
+ *                 date:
+ *                   type: string
+ *                 state:
+ *                   type: string
+ *                 results:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       fips:
+ *                         type: string
+ *                       county:
+ *                         type: string
+ *                       lastUpdated:
+ *                         type: string
+ *                       confirmed:
+ *                         type: string
+ *                       deaths:
+ *                         type: string
+ */
+
 
 /**
  * @swagger
@@ -100,7 +145,7 @@ app.get('/news/rss', (req, res) => {
  *         required: false
  *     responses:
  *       200:
- *         description: List of a state's daily case numbers for each state
+ *         description: List of a state's daily case numbers
  *         schema: 
  *           type: object
  *           properties:
@@ -116,15 +161,15 @@ app.get('/news/rss', (req, res) => {
  *                   items:
  *                     type: object
  *                     properties:
- *                       FIPS:
+ *                       fips:
  *                         type: string
- *                       County:
+ *                       county:
  *                         type: string
- *                       Confirmed:
+ *                       lastUpdated:
  *                         type: string
- *                       Deaths:
+ *                       confirmed:
  *                         type: string
- *                       Recovered:
+ *                       deaths:
  *                         type: string
  */
 
@@ -162,15 +207,15 @@ app.get('/news/rss', (req, res) => {
  *                   items:
  *                     type: object
  *                     properties:
- *                       FIPS:
+ *                       fips:
  *                         type: string
- *                       County:
+ *                       county:
  *                         type: string
- *                       Confirmed:
+ *                       lastUpdated:
  *                         type: string
- *                       Deaths:
+ *                       confirmed:
  *                         type: string
- *                       Recovered:
+ *                       deaths:
  *                         type: string
  */
 
@@ -231,6 +276,10 @@ app.get('/api/v1/daily/us/county', (req, res) => {
     return res.send({ error: `No date in query. ${currentDate} is the most recent.`})
   }
 
+  if (!state) {
+    state = 'all'
+  }
+
   getDataFromGithub(date, state, (error, results) => {
     if (error) {
       return res.send({ error })
@@ -239,6 +288,7 @@ app.get('/api/v1/daily/us/county', (req, res) => {
     res.send({
       daily: {
         date: date,
+        state: state,
         results
       }
     })

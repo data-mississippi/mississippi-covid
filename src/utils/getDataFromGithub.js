@@ -31,7 +31,7 @@ const createJSON = (csv, state, date, sendData) => {
   }
 
   // they changed their csv format on 03-23-2020
-  let newHeaders = ['FIPS', 'County', 'State', 'Country', 'lastUpdated', 'Latitude', 'Longitude', 'Confirmed', 'Deaths', 'Recovered', 'Active', 'combinedKey']
+  let newHeaders = ['fips', 'county', 'state', 'country', 'lastUpdated', 'latitude', 'longitude', 'confirmed', 'deaths', 'recovered', 'active', 'combinedKey']
   let oldHeaders = ['provinceState', 'countryRegion', 'lastUpdated', 'confirmed', 'deaths', 'recovered', 'latitude', 'longitude']
 
   let csvToJsonOptions = {
@@ -39,16 +39,32 @@ const createJSON = (csv, state, date, sendData) => {
   }
 
   console.log('state', state)
-  if (state) {
+  if (state && state != 'ALL') {
+    // this is so hacky. i'm passing in "ALL" from daily/us/county, 
+    // so i can add it back to the response body
+    // need to figure out better way to handle these queries
+    // also having to match the upperCase to parse the CSV
+    console.log(state)
+
     filterOptions = {
       hasHeader: true,
       columnToFilter: 'Province_State',
       filterCriteria: state = state[0].toUpperCase() + state.substring(1),
       filterType: 'EXACT'
-    }
+    } 
     
     csvToJsonOptions.headers = newHeaders;
-    csvToJsonOptions.ignoreColumns = /(State|Country|Latitude|Longitude|Active|combinedKey)/
+    csvToJsonOptions.ignoreColumns = /(State|Country|Latitude|Longitude|Recovered|Active|combinedKey)/
+  } else if (state === 'all') {
+    filterOptions = {
+      hasHeader: true,
+      columnToFilter: 'Country_Region',
+      filterCriteria: 'US',
+      filterType: 'EXACT'
+    } 
+    
+    csvToJsonOptions.headers = newHeaders;
+    csvToJsonOptions.ignoreColumns = /(State|Country|Latitude|Longitude|Recovered|Active|combinedKey)/
   }
 
   if (date < '03-23-2020') {
