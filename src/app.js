@@ -255,7 +255,7 @@ app.get('/api/v1/daily/us/states', (req, res) => {
 
   if (!query.date) {
     let currentDate = createDateForQuery()
-    return res.send({ error: `County data not available before 03-22-2020. ${currentDate} is the most current based on our data.`})
+    return res.send({ error: `Invalid date. Data from ${currentDate} is the most recent available. County data not available before 03-22-2020.`})
   }
 
   getData.fromJohnsHopkins(query, (error, results) => {
@@ -280,7 +280,7 @@ app.get('/api/v1/daily/us/counties', (req, res) => {
   
   if (!query.date) {
     let currentDate = createDateForQuery()
-    return res.send({ error: `No date in query. Data from ${currentDate} is the most recent available.`})
+    return res.send({ error: `Invalid date. Data from ${currentDate} is the most recent available. County data not available before 03-22-2020.`})
   }
 
   getData.fromJohnsHopkins(query, (error, results) => {
