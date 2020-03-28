@@ -20,68 +20,54 @@ const getDataFromGithub = (date, state, sendData) => {
 }
 
 const createJSON = (csv, state, date, sendData) => {
-  let filterOptions = {
+  let csvFilterOptions = {
     hasHeader: true,
     columnToFilter: 'Country_Region',
     filterCriteria: 'US',
-    filterType: 'EXACT'
+    filterType: 'EXACT',
+  }
+
+  let csvToJsonOptions = {
+    output: 'json',
+    headers: ['fips', 'county', 'state', 'country', 'lastUpdated', 'latitude', 'longitude', 'confirmed', 'deaths', 'recovered', 'active', 'combinedKey'],
+    ignoreColumns: /(country|latitude|longitude|recovered|active|combinedKey)/
   }
 
   // they changed their csv format on 03-23-2020
-  let newHeaders = ['fips', 'county', 'state', 'country', 'lastUpdated', 'latitude', 'longitude', 'confirmed', 'deaths', 'recovered', 'active', 'combinedKey']
-  let oldHeaders = ['provinceState', 'countryRegion', 'lastUpdated', 'confirmed', 'deaths', 'recovered', 'latitude', 'longitude']
-
-  let csvToJsonOptions = {
-    output: 'json'
-  }
-
-  if (state && state != 'ALL') {
-    // this is so hacky. i'm passing in "ALL" from daily/us/county, 
-    // so i can add it back to the response body
-    // need to figure out better way to handle these queries
-    // also having to match the upperCase to parse the CSV
-    console.log(state)
-
-    filterOptions = {
-      hasHeader: true,
-      columnToFilter: 'Province_State',
-      filterCriteria: state = state[0].toUpperCase() + state.substring(1),
-      filterType: 'EXACT'
-    } 
-    
-    csvToJsonOptions.headers = newHeaders;
-    csvToJsonOptions.ignoreColumns = /(state|country|latitude|longitude|recovered|active|combinedKey)/
-  } else if (state === 'all') {
-    filterOptions = {
-      hasHeader: true,
-      columnToFilter: 'Country_Region',
-      filterCriteria: 'US',
-      filterType: 'EXACT'
-    } 
-    
-    csvToJsonOptions.headers = newHeaders;
-    csvToJsonOptions.ignoreColumns = /(State|Country|Latitude|Longitude|Recovered|Active|combinedKey)/
-  }
-
   if (date < '03-23-2020') {
-    filterOptions = {
-      hasHeader: true,
+    csvFilterOptions = {
       columnToFilter: 'Country/Region',
       filterCriteria: 'US',
       filterType: 'EXACT'
     }
-
-    csvToJsonOptions.headers = oldHeaders;
   }
 
-  csvFilterSort.filter(csv, filterOptions, (error, filteredCSV) => {
+  if (state && state != 'all') {
+    // this is so hacky. i'm passing in "ALL" from daily/us/county, 
+    // so i can add it back to the response body
+    // need to figure out better way to handle these queries
+    // also having to match the upperCase to parse the CSV
+
+    csvFilterOptions = {
+      columnToFilter: 'Province_State',
+      filterCriteria: state = state[0].toUpperCase() + state.substring(1),
+      filterType: 'EXACT'
+    }
+  } else if (state === 'all') {
+    csvFilterOptions = {
+      columnToFilter: 'Country_Region',
+      filterCriteria: 'US',
+      filterType: 'EXACT'
+    }
+  }
+
+  csvFilterSort.filter(csv, csvFilterOptions, (error, filteredCSV) => {
     csvToJSON(csvToJsonOptions).fromString(filteredCSV).then((jsonObj) => {
       if (jsonObj.length === 0) {
         sendData('No results found for that state or date range. Please try again.', undefined)
       } else {
         sendData(undefined, jsonObj);
       }
-      
     })
   })
 }
