@@ -1,4 +1,4 @@
-# mississippi-covid
+# mississippicovid.com
 
 ---
 ## Requirements
