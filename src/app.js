@@ -108,7 +108,7 @@ app.get('/news/rss', (req, res) => {
  *               properties:
  *                 date:
  *                   type: string
- *                 state:
+ *                 country:
  *                   type: string
  *                 results:
  *                   type: array
@@ -118,6 +118,8 @@ app.get('/news/rss', (req, res) => {
  *                       fips:
  *                         type: string
  *                       county:
+ *                         type: string
+ *                       state:
  *                         type: string
  *                       lastUpdated:
  *                         type: string
