@@ -54,7 +54,7 @@ const createJSON = (csv, state, date, sendData) => {
     } 
     
     csvToJsonOptions.headers = newHeaders;
-    csvToJsonOptions.ignoreColumns = /(State|Country|Latitude|Longitude|Recovered|Active|combinedKey)/
+    csvToJsonOptions.ignoreColumns = /(state|country|latitude|longitude|recovered|active|combinedKey)/
   } else if (state === 'all') {
     filterOptions = {
       hasHeader: true,
