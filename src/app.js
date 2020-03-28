@@ -3,7 +3,7 @@ const express = require('express');
 const hbs = require('hbs');
 const swaggerJSDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
-const getDataFromGithub = require('./utils/getDataFromGithub');
+const getData = require('./utils/getData');
 const createDateForQuery = require('./utils/date');
 const getMSTodayRSS = require('./utils/getMSTodayRSS');
 
@@ -132,10 +132,10 @@ app.get('/news/rss', (req, res) => {
 
 /**
  * @swagger
- * /api/v1/daily/us/state:
+ * /api/v1/daily/us/states:
  *   get:
- *     summary: Get each US state's daily case numbers
- *     description: Returns a list of a state's daily case numbers for each county. NOTE -- county data is not available before 03-23-2020, only state data.
+ *     summary: Get total case numbers per US state.
+ *     description: Returns a count of a state's case numbers. Can get individual states or all.
  *     parameters:
  *       - in: query
  *         name: date
@@ -154,6 +154,8 @@ app.get('/news/rss', (req, res) => {
  *             daily:
  *               type: object
  *               properties:
+ *                 source:
+ *                   type: string
  *                 date:
  *                   type: string
  *                 state:
@@ -178,10 +180,11 @@ app.get('/news/rss', (req, res) => {
 
 /**
  * @swagger
- * /api/v1/daily/us/county:
+ * /api/v1/daily/us/counties:
  *   get:
  *     summary: Get each US county's daily case numbers
- *     description: Returns a list of daily case numbers for each US county. NOTE -- county data is not available before 03-23-2020, only state data.
+ *     description: Returns a list of daily case numbers for each US county. Can get individual states or all. NOTE -- county data is not available before 03-23-2020, only state data. 
+ *        Sample query -- /api/v1/daily/us/counties?date=03-24-2020&state=mississippi
  *     parameters:
  *       - in: query
  *         name: date
@@ -200,6 +203,8 @@ app.get('/news/rss', (req, res) => {
  *             daily:
  *               type: object
  *               properties:
+ *                 source:
+ *                   type: string
  *                 date:
  *                   type: string
  *                 state:
@@ -230,7 +235,7 @@ app.get('/api/v1/daily/us', (req, res) => {
     return res.send({ error: `No date in query. ${currentDate} is the most recent.`})
   }
 
-  getDataFromGithub(date, state, (error, results) => {
+  getData.fromJohnsHopkins({ date, state }, (error, results) => {
     if (error) {
       return res.send({ error })
     }
@@ -245,56 +250,57 @@ app.get('/api/v1/daily/us', (req, res) => {
   })
 })
 
-app.get('/api/v1/daily/us/state', (req, res) => {
-  let date = req.query.date;
-  let state = req.query.state;
+app.get('/api/v1/daily/us/states', (req, res) => {
+  const query = req.query;
 
-  if (!date) {
+  if (!query.date) {
     let currentDate = createDateForQuery()
-    return res.send({ error: `No date in query. ${currentDate} is the most current based on our data.`})
+    return res.send({ error: `County data not available before 03-22-2020. ${currentDate} is the most current based on our data.`})
   }
 
-  getDataFromGithub(date, state, (error, results) => {
+  getData.fromJohnsHopkins(query, (error, results) => {
     if (error) {
       return res.send({ error })
     }
 
     res.send({
       daily: {
-        date: date,
-        state: state,
+        source: 'Johns Hopkins University',
+        date: query.date,
+        state: query.state,
         results
       }
     })
   })
 })
 
-app.get('/api/v1/daily/us/county', (req, res) => {
-  let date = req.query.date;
-  let state = req.query.state;
+app.get('/api/v1/daily/us/counties', (req, res) => {
+  const query = req.query;
+  query.county = true;
   
-  if (!date) {
+  if (!query.date) {
     let currentDate = createDateForQuery()
-    return res.send({ error: `No date in query. ${currentDate} is the most recent.`})
+    return res.send({ error: `No date in query. Data from ${currentDate} is the most recent available.`})
   }
 
-  if (!state) {
-    state = 'all'
-  }
-
-  getDataFromGithub(date, state, (error, results) => {
+  getData.fromJohnsHopkins(query, (error, results) => {
     if (error) {
       return res.send({ error })
     }
     
     res.send({
       daily: {
-        date: date,
-        state: state,
+        source: 'Johns Hopkins University',
+        date: query.date,
+        state: query.state,
         results
       }
     })
   })
+})
+
+app.get('/chronological/state', (req, res) => {
+
 })
 
 app.get('/data', (req, res) => {
