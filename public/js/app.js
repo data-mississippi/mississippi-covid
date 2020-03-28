@@ -7,7 +7,7 @@ window.onload = function() {
 
   const date = createDateForQuery();
   
-  fetch(`/api/v1/daily/us/county?date=${date}&state=mississippi`).then((response) => {
+  fetch(`/api/v1/daily/us/counties?date=${date}&state=mississippi`).then((response) => {
     response.json().then((data) => {
       counties.innerHTML = ''
       if (data.error) {
