@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <title>data</title>
+    <link rel="icon" href="/img/ms-outline.jpeg">
+    <link rel="stylesheet" href="./css/styles.css">
+  </head>
+
+  <body>
+    <div class="main-content">
+      {{> header}}
+      <p>
+        Although this website is for Mississippi, an open API exists for querying case data. 
+        The data is limited to data from Johns Hopkins University's daily counts, 
+        but the goal is to source more data. Working on adding the New York Times data.
+      </p>
+      <p>
+        Johns Hopkins updates their data everyday at 23:59 UTC. We query the most recent data.
+        It comes <a href="https://github.com/CSSEGISandData/COVID-19" target="_blank">from here.</a>
+      </p>
+      <p>Here is <a href="/docs">the api documentation.</a></p>
+
+      
+
+    </div>
+    
+    {{> footer }} 
+  </body>
+</html>

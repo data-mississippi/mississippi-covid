@@ -1,6 +1,8 @@
 const path = require('path');
 const express = require('express');
-var hbs = require('hbs');
+const hbs = require('hbs');
+const swaggerJSDoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
 const getDataFromGithub = require('./utils/getDataFromGithub');
 const createDateForQuery = require('./utils/date');
 const getMSTodayRSS = require('./utils/getMSTodayRSS');
@@ -21,19 +23,37 @@ hbs.registerPartials(PARTIALS_PATH);
 // setup root route
 app.use(express.static(PUBLIC_DIRECTORY));
 
+
+// setup swagger
+const swaggerDefinition = {
+  info: {
+    title: 'COVID-19 API',
+    version: '1.0.0',
+    description: 'An open API for COVID-19 case data.'
+  },
+  customSiteTitle: 'docs',
+  customCssUrl: 'https://cdn.jsdelivr.net/npm/swagger-ui-themes@3.0.0/themes/3.x/theme-newspaper.css'
+}
+const options = {
+  swaggerDefinition,
+  apis: ['./src/app.js']
+}
+
+const specs = swaggerJSDoc(options);
+
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(specs));
+
 // configure the routes
 app.get('', (req, res) => {
   res.render('index', {
-    title: 'Mississippi COVID-19',
-    name: 'sam mcalilly'
+    title: 'Mississippi COVID-19'
   })
 })
 
 
 app.get('/about', (req, res) => {
   res.render('about', {
-    title: 'about',
-    name: 'sam mcalilly'
+    title: 'about'
   })
 })
 
@@ -41,8 +61,7 @@ app.get('/about', (req, res) => {
 app.get('/resources', (req, res) => {
   res.render('resources', {
     title: 'resources',
-    helpText: 'Coronavirus outreach for Mississippi communities -- information and donate',
-    name: 'sam mcalilly'
+    helpText: 'Coronavirus outreach for Mississippi communities -- information and donate'
   })
 })
 
@@ -66,56 +85,133 @@ app.get('/news/rss', (req, res) => {
 
 /**
  * @swagger
- * /api/v1/daily:
+ * /api/v1/daily/us/state:
  *   get:
- *     summary: Get each county's daily case numbers
- *     description: Returns a list of a state's daily case numbers for each county
- *     tags:
- *       - counties
+ *     summary: Get each US state's daily case numbers
+ *     description: Returns a list of a state's daily case numbers for each county. NOTE -- county data is not available before 03-23-2020, only state data.
  *     parameters:
+ *       - in: query
+ *         name: date
+ *         type: string
+ *         required: true
  *       - in: query
  *         name: state
  *         type: string
- *         required: true
- *         enum:
- *           - yes
- *           - no
- *       - in: query
- *         name: date
- *         type: 
+ *         required: false
  *     responses:
  *       200:
- *         description: List of animals
- *         schema:
+ *         description: List of a state's daily case numbers for each state
+ *         schema: 
  *           type: object
  *           properties:
- *             animals:
- *               type: array
- *               description: all the animals
- *               items:
- *                 type: string
+ *             daily:
+ *               type: object
+ *               properties:
+ *                 date:
+ *                   type: string
+ *                 state:
+ *                   type: string
+ *                 results:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       FIPS:
+ *                         type: string
+ *                       County:
+ *                         type: string
+ *                       Confirmed:
+ *                         type: string
+ *                       Deaths:
+ *                         type: string
+ *                       Recovered:
+ *                         type: string
  */
 
 
-app.get('/api/v1/daily', (req, res) => {
-  let date = req.query.date;
-  let state = req.query.state;
+/**
+ * @swagger
+ * /api/v1/daily/us/county:
+ *   get:
+ *     summary: Get each US county's daily case numbers
+ *     description: Returns a list of daily case numbers for each US county. NOTE -- county data is not available before 03-23-2020, only state data.
+ *     parameters:
+ *       - in: query
+ *         name: date
+ *         type: string
+ *         required: true
+ *       - in: query
+ *         name: state
+ *         type: string
+ *         required: false
+ *     responses:
+ *       200:
+ *         description: List of a state's daily case numbers for each county
+ *         schema: 
+ *           type: object
+ *           properties:
+ *             daily:
+ *               type: object
+ *               properties:
+ *                 date:
+ *                   type: string
+ *                 state:
+ *                   type: string
+ *                 results:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       FIPS:
+ *                         type: string
+ *                       County:
+ *                         type: string
+ *                       Confirmed:
+ *                         type: string
+ *                       Deaths:
+ *                         type: string
+ *                       Recovered:
+ *                         type: string
+ */
 
-  if (!state) {
-    return res.send({
-      error: 'you must provide a state'
-    })
-  }
-  
+app.get('/api/v1/daily/us', (req, res) => {
+  let date = req.query.date;
+  let state = false;
+
   if (!date) {
-    date = createDateForQuery();
+    let currentDate = createDateForQuery()
+    return res.send({ error: `No date in query. ${currentDate} is the most recent.`})
   }
 
   getDataFromGithub(date, state, (error, results) => {
     if (error) {
       return res.send({ error })
     }
-    
+
+    res.send({
+      daily: {
+        date: date,
+        country: 'US',
+        results
+      }
+    })
+  })
+})
+
+app.get('/api/v1/daily/us/state', (req, res) => {
+  let date = req.query.date;
+  let state = req.query.state;
+
+  if (!date) {
+    let currentDate = createDateForQuery()
+    return res.send({ error: `No date in query. ${currentDate} is the most current based on our data.`})
+  }
+
+  getDataFromGithub(date, state, (error, results) => {
+    if (error) {
+      return res.send({ error })
+    }
+
     res.send({
       daily: {
         date: date,
@@ -126,10 +222,32 @@ app.get('/api/v1/daily', (req, res) => {
   })
 })
 
-app.get('/api', (req, res) => {
-  res.render('api', {
-    title: 'api',
+app.get('/api/v1/daily/us/county', (req, res) => {
+  let date = req.query.date;
+  let state = req.query.state;
+  
+  if (!date) {
+    let currentDate = createDateForQuery()
+    return res.send({ error: `No date in query. ${currentDate} is the most recent.`})
+  }
 
+  getDataFromGithub(date, state, (error, results) => {
+    if (error) {
+      return res.send({ error })
+    }
+    
+    res.send({
+      daily: {
+        date: date,
+        results
+      }
+    })
+  })
+})
+
+app.get('/data', (req, res) => {
+  res.render('data', {
+    title: 'data',
   })
 })
 
