@@ -33,7 +33,7 @@ Let me know if you have any troubles, because I've never walked anybody through 
 ## etc
 
 The UI templating engine is called Handlebars: https://www.npmjs.com/package/handlebars. (Need to fix a security warning for a dependency.)
-The file extension is `.hbs` but it's html with the handlebars syntax for renderingThose files are served by Express. The files are in the `templates` directory. 
+The file extension is `.hbs` but it's html with the handlebars syntax for rendering. Those files are served by Express. The files are in the `templates` directory. 
 The main html pages are in `views` and partials are in `partials`.
 
 The variables for handlebars come from app.js. The `.hbs` file name matches the route set in app.js.
