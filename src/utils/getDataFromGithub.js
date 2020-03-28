@@ -9,20 +9,17 @@ const getDataFromGithub = (date, state, sendData) => {
   }
 
   const url = `https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/${date}.csv`
-  console.log(date)
 
   request.get(url, (error, { body } = {}) => {
     if (error) {
       sendData('Unable to connect to data source. Please try again.', undefined)
     } else {
-      console.log(body)
       createJSON(body, state, date, sendData);
     }
   })
 }
 
 const createJSON = (csv, state, date, sendData) => {
-  console.log(csv)
   let filterOptions = {
     hasHeader: true,
     columnToFilter: 'Country_Region',
@@ -38,7 +35,6 @@ const createJSON = (csv, state, date, sendData) => {
     output: 'json'
   }
 
-  console.log('state', state)
   if (state && state != 'ALL') {
     // this is so hacky. i'm passing in "ALL" from daily/us/county, 
     // so i can add it back to the response body
@@ -77,8 +73,6 @@ const createJSON = (csv, state, date, sendData) => {
 
     csvToJsonOptions.headers = oldHeaders;
   }
-
-  console.log(csvToJsonOptions)
 
   csvFilterSort.filter(csv, filterOptions, (error, filteredCSV) => {
     csvToJSON(csvToJsonOptions).fromString(filteredCSV).then((jsonObj) => {

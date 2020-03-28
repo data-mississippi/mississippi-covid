@@ -4,8 +4,10 @@ counties.textContent = ''
 
 window.onload = function() {
   counties.innerHTML = '<p>loading...</p>'
+
+  const date = createDateForQuery()
   
-  fetch('/api/v1/daily/us/county?date=03-26-2020&state=mississippi').then((response) => {
+  fetch(`/api/v1/daily/us/county?date=${date}&state=mississippi`).then((response) => {
     response.json().then((data) => {
       counties.innerHTML = ''
       if (data.error) {
@@ -55,4 +57,23 @@ const generateTable = (table, data) => {
       cell.appendChild(text);
     }
   }
+}
+
+const createDateForQuery = () => {
+  const today = new Date();
+  const yyyy = today.getFullYear();
+  let dd = today.getDate();
+  let mm = today.getMonth() + 1;
+  
+    if (dd < 10) {
+      dd = '0' + dd;
+    }
+
+    if (mm < 10) {
+      mm = '0' + mm;
+    }
+
+    date = `${mm}-${dd}-${yyyy}`
+
+    return date;
 }

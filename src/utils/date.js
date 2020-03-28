@@ -1,6 +1,9 @@
 const createDateForQuery = () => {
   const today = new Date();
+  console.log(today)
+  
   const utc = today.getTime()
+  console.log(utc)
   const yyyy = today.getFullYear();
   let dd = today.getDate() - 1;
   let mm = today.getMonth() + 1;
@@ -17,5 +20,7 @@ const createDateForQuery = () => {
 
     return date;
 }
+
+createDateForQuery()
 
 module.exports = createDateForQuery;
