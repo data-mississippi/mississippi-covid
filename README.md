@@ -1,0 +1,47 @@
+# mississippi-covid
+
+---
+## Requirements
+For development, you only need Node.js installed on your machine. npm is the package manager and it comes with Node.
+The actual server is an npm package called Express.
+
+- #### Node: https://nodejs.org/en/
+- #### Express: https://www.npmjs.com/package/express
+
+If the installation was successful, you should be able to run the following commands:
+
+    $ node --version
+    $ npm --version
+
+---
+## Install
+
+    $ git clone https://github.com/smcalilly/mississippi-covid.git
+    $ cd mississippi-covid
+    $ npm install
+    
+---
+## Running the project
+
+You can run the project with this command, and the server will restart whenever you make any changes:
+
+    $ npm run dev
+    
+Let me know if you have any troubles, because I've never walked anybody through from scratch.
+
+---
+## etc
+
+The UI templating engine is called Handlebars: https://www.npmjs.com/package/handlebars. (Need to fix a security warning for a dependency.)
+The file extension is `.hbs` but it's html with the handlebars syntax for renderingThose files are served by Express. The files are in the `templates` directory. 
+The main html pages are in `views` and partials are in `partials`.
+
+The variables for handlebars come from app.js. The `.hbs` file name matches the route set in app.js.
+I need to refactor and clean that up, because that script page is getting hard to manage.
+If you see anything that might need a variable but you aren't sure or can't figure out how to do it, 
+let me know and I'll adjust.
+
+Express routing essentially handles the controller and routes in one JS method. This might help understand: http://expressjs.com/en/starter/basic-routing.html.
+
+Any resources that are sent to the client -- like css, client javascript, or images -- are available in the `public` directory.
+If you make any changes to the public folder, you might need to hard refresh in your browser to reset the cache: `shift + cmd + r`.
