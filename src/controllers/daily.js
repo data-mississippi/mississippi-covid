@@ -1,9 +1,9 @@
-const getData = require('../backgroundTasks/getData');
+const getData = require('../background/getData');
 const utcDate = require('../utils/date');
 
 exports.getCountyData = (req, res) => {
   const query = req.query;
-  query.county ? query.county : query.county = true;
+  query.county ? query.county : query.county = 'all';
 
   const currentDate = utcDate();
   
@@ -19,6 +19,7 @@ exports.getCountyData = (req, res) => {
     res.send({
       daily: {
         source: 'Johns Hopkins University',
+        sourceURL: 'https://github.com/CSSEGISandData/COVID-19',
         date: query.date,
         state: query.state,
         results

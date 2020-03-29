@@ -1,31 +1,9 @@
-const request = require('request');
 const csvToJSON = require('csvtojson')
 const csvFilterSort = require('csv-filter-sort');
 
-const fromNYTimes = ({ state, county }, sendData) => {
-  url = 'https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv'
-
-  request.get(url, (error, { body } = {}) => {
-    if (error) {
-      sendData('Unable to connect to data source. Please try again.', undefined)
-    } else {
-      let date = false;
-      createJSON(body, date, state, county, sendData)
-    }
-  })
-}
-
-const fromJohnsHopkins = ({ date, state = 'all', county}, sendData) => {
-  const url = `https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/${date}.csv`
-
-  request.get(url, (error, { body } = {}) => {
-    if (error) {
-      sendData('Unable to connect to data source. Please try again.', undefined)
-    } else {
-      createJSON(body, date, state, county, sendData);
-    }
-  })
-}
+// this is the worst code i've ever written :(
+// it gets worse the more i add to it :(
+// should probably not use npm packages to do my filters and json conversion
 
 const createJSON = (csv, date, state, county, sendData) => {
   let oldFormat = false;
@@ -34,25 +12,43 @@ const createJSON = (csv, date, state, county, sendData) => {
   }
 
   let nytimes = false;
+  
   if (!date) {
     nytimes = true;
   }
+
   const csvFilterOptions = setCsvFilterOptions(state, oldFormat, nytimes);
   const jsonOptions = setJsonOptions(oldFormat, nytimes);
 
-  // i guess this is the callback hell they speak of, i'm not a fan
-  csvFilterSort.filter(csv, csvFilterOptions, (error, filteredCSV) => {
-    csvToJSON(jsonOptions).fromString(filteredCSV).then((jsonObj) => {
-      if (jsonObj.length === 0) {
-        sendData('No results found for that state or date range. Please try again.', undefined)
-      } else if (state && !county && !oldFormat & !nytimes) {
-        const stateTotal = countStateCases(jsonObj);
-        sendData(undefined, stateTotal);
+  
+  if (nytimes && !state && !county) {
+    // can't filter csv that doesn't need filtering, so only convert json
+    csvToJSON(jsonOptions).fromString(csv).then((jsonArray) => {
+      if (jsonArray.length === 0) {
+        sendData('No results found for that query. Please try again.', undefined)
       } else {
-        sendData(undefined, jsonObj);
+        sendData(undefined, jsonArray)
       }
     })
-  })
+  } else {
+    // i guess this is the callback hell they speak of, i'm not a fan
+    csvFilterSort.filter(csv, csvFilterOptions, (error, filteredCSV) => {
+      csvToJSON(jsonOptions).fromString(filteredCSV).then((jsonArray) => {
+        if (jsonArray.length === 0) {
+          sendData('No results found for that query. Please try again.', undefined)
+        } else if (state && !county && !oldFormat & !nytimes) {
+          const stateTotal = countStateCases(jsonArray);
+          sendData(undefined, stateTotal);
+        } else if (county && county) {
+          const countyRecord = filterByCounty(jsonArray, county);
+          sendData(undefined, countyRecord)
+        } else {
+          sendData(undefined, jsonArray);
+        }
+      })
+    })
+  }
+
 }
 
 const setJsonOptions = (oldFormat, nytimes) => {
@@ -94,7 +90,11 @@ const setCsvFilterOptions = (state, oldFormat, nytimes) => {
       filterCriteria: state = state[0].toUpperCase() + state.substring(1),
       filterType: 'EXACT'
     }
-  } 
+  } else if (nytimes) {
+    filterOptions = {
+      hasHeader: true
+    }
+  }
 
   if (state && state != 'all' && !nytimes) {
     // this is so hacky. i'm passing in "ALL" from daily/us/county, 
@@ -133,10 +133,19 @@ const setCsvFilterOptions = (state, oldFormat, nytimes) => {
   return filterOptions;
 }
 
-const countStateCases = (jsonObj) => {
+const filterByCounty = (jsonArray, county) => {
+  county = county[0].toUpperCase() + county.substring(1)
+  const countyData = jsonArray.filter((json) => {
+    return json.county === county;
+  })
+
+  return countyData;
+}
+
+const countStateCases = (jsonArray) => {
   let stateMap = {}
 
-  jsonObj.forEach(json => {
+  jsonArray.forEach(json => {
     let currentState = json.state;
     
     if (!stateMap.hasOwnProperty(currentState)) {
@@ -144,7 +153,7 @@ const countStateCases = (jsonObj) => {
         state: currentState,
         confirmed: 0,
         deaths: 0,
-        lastUpdated: jsonObj[0].lastUpdated
+        lastUpdated: jsonArray[0].lastUpdated
       }
       stateMap[currentState] = stateTotal;
       stateMap[currentState].confirmed += parseInt(json.confirmed)
@@ -161,7 +170,4 @@ const countStateCases = (jsonObj) => {
   return stateArray;
 }
 
-module.exports = {
-  fromJohnsHopkins: fromJohnsHopkins,
-  fromNYTimes: fromNYTimes
-}
+module.exports = createJSON;

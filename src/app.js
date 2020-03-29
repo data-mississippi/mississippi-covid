@@ -3,9 +3,6 @@ const express = require('express');
 const hbs = require('hbs');
 const routes = require('./routes');
 
-// const swaggerJSDoc = require('swagger-jsdoc');
-// const swaggerUi = require('swagger-ui-express');
-
 // define paths for express config
 const PUBLIC_DIRECTORY = path.join(__dirname, '../public');
 const VIEWS_PATH = path.join(__dirname, '../templates/views');

@@ -1,9 +1,7 @@
-const getData = require('../backgroundTasks/getData');
+const getData = require('../background/getData');
 
 exports.getCountyData = (req, res) => {
   const query = req.query;
-
-  query.county ? query.county : query.county = true;
 
   getData.fromNYTimes(query, (error, results) => {
     if (error) {
@@ -11,7 +9,14 @@ exports.getCountyData = (req, res) => {
     }
 
     res.send({
-      results
+      chronological: {
+        source: 'The New York Times',
+        sourceURL: 'https://github.com/nytimes/covid-19-data',
+        state: query.state,
+        county: query.county,
+        results
+      }
     })
+    
   });
 }

@@ -113,7 +113,7 @@ router.use('/docs', swaggerUi.serve, swaggerUi.setup(specs));
  *         schema: 
  *           type: object
  *           properties:
- *             daily:
+ *             chronological:
  *               type: object
  *               properties:
  *                 source:

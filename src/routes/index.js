@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const api = require('./api/index');
-const getMSTodayRSS = require('../backgroundTasks/getMSTodayRSS');
+const getMSTodayRSS = require('../background/getMSTodayRSS');
 
 router.use('/api', api)
 
