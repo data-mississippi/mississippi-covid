@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const getData = require('../../../backgroundTasks/getData');
 
-router.get('/', (req, res) => {
+router.get('/counties', (req, res) => {
   const query = req.query;
 
   getData.fromNYTimes(query, (error, results) => {
