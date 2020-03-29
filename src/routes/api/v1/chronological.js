@@ -1,18 +1,6 @@
 const router = require('express').Router();
-const getData = require('../../../backgroundTasks/getData');
+const controller = require('../../../controllers/chronological')
 
-router.get('/counties', (req, res) => {
-  const query = req.query;
-
-  getData.fromNYTimes(query, (error, results) => {
-    if (error) {
-      return res.send({ error })
-    }
-
-    res.send({
-      results
-    })
-  });
-})
+router.get('/counties', controller.getCountyData);
 
 module.exports = router;
