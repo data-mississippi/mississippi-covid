@@ -39,7 +39,7 @@ const createJSON = (csv, date, state, county, sendData) => {
         } else if (state && !county && !oldFormat & !nytimes) {
           const stateTotal = countStateCases(jsonArray);
           sendData(undefined, stateTotal);
-        } else if (county && county) {
+        } else if (county && county !== 'all') {
           const countyRecord = filterByCounty(jsonArray, county);
           sendData(undefined, countyRecord)
         } else {

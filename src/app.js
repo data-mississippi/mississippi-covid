@@ -5,8 +5,8 @@ const routes = require('./routes');
 
 // define paths for express config
 const PUBLIC_DIRECTORY = path.join(__dirname, '../public');
-const VIEWS_PATH = path.join(__dirname, '../templates/views');
-const PARTIALS_PATH = path.join(__dirname, '../templates/partials');
+const VIEWS_PATH = path.join(__dirname, '../views/pages');
+const PARTIALS_PATH = path.join(__dirname, '../views/partials');
 
 // create app instance
 const app = express();

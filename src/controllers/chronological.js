@@ -2,6 +2,7 @@ const getData = require('../background/getData');
 
 exports.getCountyData = (req, res) => {
   const query = req.query;
+  query.county ? query.county : query.county = 'all';
 
   getData.fromNYTimes(query, (error, results) => {
     if (error) {

@@ -98,6 +98,7 @@ router.use('/docs', swaggerUi.serve, swaggerUi.setup(specs));
  *   get:
  *     summary: Get total case numbers for each US state.
  *     description: Returns a single day for all US counties. Date is required. Can filter by state.
+ *        Sample query -- /api/v1/daily/us/states?date=03-28-2020&state=mississippi
  *     parameters:
  *       - in: query
  *         name: date
@@ -154,10 +155,14 @@ router.use('/docs', swaggerUi.serve, swaggerUi.setup(specs));
  *   get:
  *     summary: Get a chronological list of daily case numbers for each US county
  *     description: Returns a chronological list of total case count in every US county, starting with the first reported case. It only includes a county if there are any reported cases for that county. Each day includes the prior day’s count and adds to that count if there are any new cases. Can filter by state and county.
- *        Sample query -- /api/v1/daily/chronological?state=mississippi
+ *        Sample query -- /api/v1/daily/chronological/counties?state=mississippi
  *     parameters:
  *       - in: query
  *         name: state
+ *         type: string
+ *         required: false
+ *       - in: query
+ *         name: county
  *         type: string
  *         required: false
  *     responses:

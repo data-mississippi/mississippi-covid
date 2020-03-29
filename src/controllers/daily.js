@@ -32,7 +32,7 @@ exports.getStateData = (req, res) => {
   const query = req.query;
   let currentDate = utcDate()
 
-  if (!query.date || query.date >= currentDate) {
+  if (!query.date || query.date > currentDate) {
     return res.send({ error: `Invalid date. Data from ${currentDate} is the most recent available.`})
   }
 
