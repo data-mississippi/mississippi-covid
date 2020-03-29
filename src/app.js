@@ -1,14 +1,20 @@
 const path = require('path');
 const express = require('express');
 const hbs = require('hbs');
+const routes = require('./routes');
+
 const swaggerJSDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
-const getData = require('./backgroundApi/getData');
-const utcDate = require('./helpers/date');
-const getMSTodayRSS = require('./backgroundApi/getMSTodayRSS');
+const getData = require('./backgroundTasks/getData');
+const utcDate = require('./utils/date');
+const getMSTodayRSS = require('./backgroundTasks/getMSTodayRSS');
 
 const app = express();
 const port = process.env.PORT || 3000;
+
+//  Connect all our routes to our application
+console.log(routes)
+app.use('/', routes);
 
 // define paths for express config
 const PUBLIC_DIRECTORY = path.join(__dirname, '../public');
@@ -42,14 +48,6 @@ const options = {
 const specs = swaggerJSDoc(options);
 
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(specs));
-
-// configure the routes
-app.get('', (req, res) => {
-  res.render('index', {
-    title: 'Mississippi COVID-19'
-  })
-})
-
 
 app.get('/about', (req, res) => {
   res.render('about', {
@@ -225,93 +223,6 @@ app.get('/news/rss', (req, res) => {
  *                       deaths:
  *                         type: string
  */
-
-app.get('/api/v1/daily/us', (req, res) => {
-  let date = req.query.date;
-  let state = false;
-
-  if (!date) {
-    let currentDate = utcDate()
-    return res.send({ error: `No date in query. ${currentDate} is the most recent.`})
-  }
-
-  getData.fromJohnsHopkins({ date, state }, (error, results) => {
-    if (error) {
-      return res.send({ error })
-    }
-
-    res.send({
-      daily: {
-        date: date,
-        country: 'US',
-        results
-      }
-    })
-  })
-})
-
-app.get('/api/v1/daily/us/states', (req, res) => {
-  const query = req.query;
-  let currentDate = utcDate()
-
-  if (!query.date || query.date >= currentDate) {
-    return res.send({ error: `Invalid date. Data from ${currentDate} is the most recent available.`})
-  }
-
-  getData.fromJohnsHopkins(query, (error, results) => {
-    if (error) {
-      return res.send({ error })
-    }
-
-    res.send({
-      daily: {
-        source: 'Johns Hopkins University',
-        date: query.date,
-        state: query.state,
-        results
-      }
-    })
-  })
-})
-
-app.get('/api/v1/daily/us/counties', (req, res) => {
-  const query = req.query;
-  query.county = true;
-  let currentDate = utcDate()
-  
-  if (!query.date || query.date > currentDate) {
-    return res.send({ error: `Invalid date. Data from ${currentDate} is the most recent available. County data not available before 03-22-2020.`})
-  }
-
-  getData.fromJohnsHopkins(query, (error, results) => {
-    if (error) {
-      return res.send({ error })
-    }
-    
-    res.send({
-      daily: {
-        source: 'Johns Hopkins University',
-        date: query.date,
-        state: query.state,
-        results
-      }
-    })
-  })
-})
-
-app.get('/api/v1/chronological', (req, res) => {
-  const query = req.query;
-
-  getData.fromNYTimes(query, (error, results) => {
-    if (error) {
-      return res.send({ error })
-    }
-
-    res.send({
-      results
-    })
-  });
-})
 
 app.get('/data', (req, res) => {
   res.render('data', {
