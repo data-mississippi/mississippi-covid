@@ -2,14 +2,15 @@ const request = require('request');
 const csvToJSON = require('csvtojson')
 const csvFilterSort = require('csv-filter-sort');
 
-const fromNYTimes = ({ state }) => {
+const fromNYTimes = ({ state, county }, sendData) => {
   url = 'https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv'
 
   request.get(url, (error, { body } = {}) => {
     if (error) {
       sendData('Unable to connect to data source. Please try again.', undefined)
     } else {
-      console.log(body)
+      let date = false;
+      createJSON(body, date, state, county, sendData)
     }
   })
 }
@@ -31,14 +32,20 @@ const createJSON = (csv, date, state, county, sendData) => {
   if (date <= '03-21-2020') {
     oldFormat = true
   }
-  const csvFilterOptions = setCsvFilterOptions(state, oldFormat);
-  const jsonOptions = setJsonOptions(oldFormat);
 
+  let nytimes = false;
+  if (!date) {
+    nytimes = true;
+  }
+  const csvFilterOptions = setCsvFilterOptions(state, oldFormat, nytimes);
+  const jsonOptions = setJsonOptions(oldFormat, nytimes);
+
+  // i guess this is the callback hell they speak of, i'm not a fan
   csvFilterSort.filter(csv, csvFilterOptions, (error, filteredCSV) => {
     csvToJSON(jsonOptions).fromString(filteredCSV).then((jsonObj) => {
       if (jsonObj.length === 0) {
         sendData('No results found for that state or date range. Please try again.', undefined)
-      } else if (state && !county && !oldFormat) {
+      } else if (state && !county && !oldFormat & !nytimes) {
         const stateTotal = countStateCases(jsonObj);
         sendData(undefined, stateTotal);
       } else {
@@ -48,7 +55,7 @@ const createJSON = (csv, date, state, county, sendData) => {
   })
 }
 
-const setJsonOptions = (oldFormat) => {
+const setJsonOptions = (oldFormat, nytimes) => {
   let jsonOptions = {
     output: 'json',
     headers: ['fips', 'county', 'state', 'country', 'lastUpdated', 'latitude', 'longitude', 'confirmed', 'deaths', 'recovered', 'active', 'combinedKey'],
@@ -62,10 +69,17 @@ const setJsonOptions = (oldFormat) => {
     }
   }
 
+  if (nytimes) {
+    jsonOptions = {
+      output: 'json',
+      headers: ['date', 'county', 'state', 'fips', 'cases', 'deaths']
+    }
+  }
+
   return jsonOptions;
 }
 
-const setCsvFilterOptions = (state, oldFormat) => {
+const setCsvFilterOptions = (state, oldFormat, nytimes) => {
   let filterOptions = {
     hasHeader: true,
     columnToFilter: 'Country_Region',
@@ -73,7 +87,16 @@ const setCsvFilterOptions = (state, oldFormat) => {
     filterType: 'EXACT',
   }
 
-  if (state && state != 'all') {
+  if (nytimes && state) {
+    filterOptions = {
+      hasHeader: true,
+      columnToFilter: 'state',
+      filterCriteria: state = state[0].toUpperCase() + state.substring(1),
+      filterType: 'EXACT'
+    }
+  } 
+
+  if (state && state != 'all' && !nytimes) {
     // this is so hacky. i'm passing in "ALL" from daily/us/county, 
     // so i can add it back to the response body
     // need to figure out better way to handle these queries
@@ -94,7 +117,6 @@ const setCsvFilterOptions = (state, oldFormat) => {
 
   // they changed their csv format on 03-23-2020
   if (oldFormat && state != 'all') {
-    console.log('truthy')
     filterOptions = {
       columnToFilter: 'Province/State',
       filterCriteria: state = state[0].toUpperCase() + state.substring(1),

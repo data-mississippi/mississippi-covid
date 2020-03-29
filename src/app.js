@@ -3,9 +3,9 @@ const express = require('express');
 const hbs = require('hbs');
 const swaggerJSDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
-const getData = require('./utils/getData');
-const createDateForQuery = require('./utils/date');
-const getMSTodayRSS = require('./utils/getMSTodayRSS');
+const getData = require('./backgroundApi/getData');
+const utcDate = require('./helpers/date');
+const getMSTodayRSS = require('./backgroundApi/getMSTodayRSS');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -231,7 +231,7 @@ app.get('/api/v1/daily/us', (req, res) => {
   let state = false;
 
   if (!date) {
-    let currentDate = createDateForQuery()
+    let currentDate = utcDate()
     return res.send({ error: `No date in query. ${currentDate} is the most recent.`})
   }
 
@@ -252,7 +252,7 @@ app.get('/api/v1/daily/us', (req, res) => {
 
 app.get('/api/v1/daily/us/states', (req, res) => {
   const query = req.query;
-  let currentDate = createDateForQuery()
+  let currentDate = utcDate()
 
   if (!query.date || query.date >= currentDate) {
     return res.send({ error: `Invalid date. Data from ${currentDate} is the most recent available.`})
@@ -277,10 +277,9 @@ app.get('/api/v1/daily/us/states', (req, res) => {
 app.get('/api/v1/daily/us/counties', (req, res) => {
   const query = req.query;
   query.county = true;
-  let currentDate = createDateForQuery()
+  let currentDate = utcDate()
   
-  if (!query.date || query.date >= currentDate) {
-    let currentDate = createDateForQuery()
+  if (!query.date || query.date > currentDate) {
     return res.send({ error: `Invalid date. Data from ${currentDate} is the most recent available. County data not available before 03-22-2020.`})
   }
 
@@ -300,8 +299,18 @@ app.get('/api/v1/daily/us/counties', (req, res) => {
   })
 })
 
-app.get('/chronological/state', (req, res) => {
+app.get('/api/v1/chronological', (req, res) => {
+  const query = req.query;
 
+  getData.fromNYTimes(query, (error, results) => {
+    if (error) {
+      return res.send({ error })
+    }
+
+    res.send({
+      results
+    })
+  });
 })
 
 app.get('/data', (req, res) => {

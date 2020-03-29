@@ -5,7 +5,7 @@ counties.textContent = ''
 window.onload = function() {
   counties.innerHTML = '<p>loading...</p>'
 
-  const date = createDateForQuery();
+  const date = utcDate();
   
   fetch(`/api/v1/daily/us/counties?date=${date}&state=mississippi`).then((response) => {
     response.json().then((data) => {
@@ -16,6 +16,7 @@ window.onload = function() {
       } else {
         counties.innerHTML = ''
 
+        // create date context descript and table
         let date = `Mississippi cases as of ${data.daily.date}`
         let dateHeader = document.createElement('h3')
         dateHeader.id = 'counties-header'
@@ -33,6 +34,27 @@ window.onload = function() {
       }
     })
   })
+}
+
+const utcDate = () => {
+  const today = new Date();
+  
+  const utcDay = today.getUTCDate()
+  const yyyy = today.getUTCFullYear();
+  let dd = utcDay - 1;
+  let mm = today.getUTCMonth() + 1;
+  
+    if (dd < 10) {
+      dd = '0' + dd;
+    }
+
+    if (mm < 10) {
+      mm = '0' + mm;
+    }
+
+    date = `${mm}-${dd}-${yyyy}`
+
+    return date;
 }
 
 const generateTableHead = (table, data) => {
@@ -57,23 +79,4 @@ const generateTable = (table, data) => {
       cell.appendChild(text);
     }
   }
-}
-
-const createDateForQuery = () => {
-  const today = new Date();
-  const yyyy = today.getFullYear();
-  let dd = today.getDate() - 1;
-  let mm = today.getMonth() + 1;
-  
-    if (dd < 10) {
-      dd = '0' + dd;
-    }
-
-    if (mm < 10) {
-      mm = '0' + mm;
-    }
-
-    date = `${mm}-${dd}-${yyyy}`
-
-    return date;
 }

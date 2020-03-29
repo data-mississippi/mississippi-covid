@@ -1,7 +1,6 @@
 let Parser = require('rss-parser');
 let parser = new Parser();
 
-
 const getMSTodayRSS = async (sendData) => {
   
   try {
@@ -9,6 +8,7 @@ const getMSTodayRSS = async (sendData) => {
     sendData(feed)
   } catch(error) {
     console.log(error)
+    sendData(error)
   }
 }
 
