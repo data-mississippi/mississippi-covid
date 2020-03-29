@@ -18,10 +18,8 @@ const fromNYTimes = ({ state, county }, sendData) => {
 
   request.get(url, (error, { body } = {}) => {
     if (error) {
-      console.log('error')
       sendData('Unable to connect to data source. Please try again.', undefined)
     } else {
-      console.log(typeof(body))
       let date = false;
       createJSON(body, date, state, county, sendData)
     }

@@ -21,7 +21,7 @@ const createJSON = (csv, date, state, county, sendData) => {
   const jsonOptions = setJsonOptions(oldFormat, nytimes);
 
   
-  if (nytimes && !state && !county) {
+  if (nytimes && !state && county == 'all') {
     // can't filter csv that doesn't need filtering, so only convert json
     csvToJSON(jsonOptions).fromString(csv).then((jsonArray) => {
       if (jsonArray.length === 0) {

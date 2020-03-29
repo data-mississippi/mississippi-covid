@@ -26,8 +26,65 @@ const options = {
 const specs = swaggerJSDoc(options);
 router.use('/docs', swaggerUi.serve, swaggerUi.setup(specs));
 
-
-
+ /** 
+ * @swagger
+ * /api/v1/chronological/counties:
+ *   get:
+ *     summary: Get a chronological list of daily case numbers for each US county
+ *     description: Returns a chronological list of total case count in every US county, starting with the first reported case. It only includes a county if there are any reported cases for that county. Each day includes the prior day’s count and adds to that count if there are any new cases. Can filter by state and county.
+ *        Sample query -- /api/v1/daily/chronological/counties?state=mississippi
+ *     parameters:
+ *       - in: query
+ *         name: state
+ *         type: string
+ *         required: false
+ *       - in: query
+ *         name: county
+ *         type: string
+ *         required: false
+ *     responses:
+ *       200:
+ *         description: A chronological list of total case numbers for each county.
+ *         schema: 
+ *           type: object
+ *           properties:
+ *             daily:
+ *               type: object
+ *               properties:
+ *                 source:
+ *                   description: Source for this data. Please attribute if you use it anywhere.
+ *                   type: string
+ *                 sourceURL:
+ *                   description: URL for the source.
+ *                   type: string
+ *                 state:
+ *                   description: The state where the cases are located.
+ *                   type: string
+ *                 results:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       date:
+ *                         description: Date for the the case count.
+ *                         type: string
+ *                       county:
+ *                         description: The county name for the case count.
+ *                         type: string
+ *                       state:
+ *                         description: The US state for the case count.
+ *                         type: string
+ *                       fips:
+ *                         description: Federal Information Processing Standard county code to uniquely identify counties.
+ *                         type: string
+ *                       cases:
+ *                         description: Count of confirmed COVID-19 cases.
+ *                         type: string
+ *                       deaths:
+ *                         description: Deaths attributed to COVID-19.
+ *                         type: string
+ *   
+ */
 
 /**
  * @swagger
@@ -146,67 +203,6 @@ router.use('/docs', swaggerUi.serve, swaggerUi.setup(specs));
  *                         description: The time when this data was last updated.
  *                         type: string
  *                 
- */
-
-
- /** 
- * @swagger
- * /api/v1/chronological/counties:
- *   get:
- *     summary: Get a chronological list of daily case numbers for each US county
- *     description: Returns a chronological list of total case count in every US county, starting with the first reported case. It only includes a county if there are any reported cases for that county. Each day includes the prior day’s count and adds to that count if there are any new cases. Can filter by state and county.
- *        Sample query -- /api/v1/daily/chronological/counties?state=mississippi
- *     parameters:
- *       - in: query
- *         name: state
- *         type: string
- *         required: false
- *       - in: query
- *         name: county
- *         type: string
- *         required: false
- *     responses:
- *       200:
- *         description: A chronological list of total case numbers for each county.
- *         schema: 
- *           type: object
- *           properties:
- *             daily:
- *               type: object
- *               properties:
- *                 source:
- *                   description: Source for this data. Please attribute if you use it anywhere.
- *                   type: string
- *                 sourceURL:
- *                   description: URL for the source.
- *                   type: string
- *                 state:
- *                   description: The state where the cases are located.
- *                   type: string
- *                 results:
- *                   type: array
- *                   items:
- *                     type: object
- *                     properties:
- *                       date:
- *                         description: Date for the the case count.
- *                         type: string
- *                       county:
- *                         description: The county name for the case count.
- *                         type: string
- *                       state:
- *                         description: The US state for the case count.
- *                         type: string
- *                       fips:
- *                         description: Federal Information Processing Standard county code to uniquely identify counties.
- *                         type: string
- *                       cases:
- *                         description: Count of confirmed COVID-19 cases.
- *                         type: string
- *                       deaths:
- *                         description: Deaths attributed to COVID-19.
- *                         type: string
- *   
  */
 
 module.exports = router;
