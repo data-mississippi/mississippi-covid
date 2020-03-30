@@ -13,9 +13,7 @@ const swaggerDefinition = {
     title: 'COVID-19 API',
     version: '1.0.0',
     description: 'An open API for COVID-19 case data.'
-  },
-  customSiteTitle: 'docs',
-  customCssUrl: 'https://cdn.jsdelivr.net/npm/swagger-ui-themes@3.0.0/themes/3.x/theme-newspaper.css'
+  }
 }
 
 const options = {
