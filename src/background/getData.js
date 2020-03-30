@@ -3,7 +3,13 @@ const createJSON = require('./utils/createJSON');
 const axios = require("axios");
 
 const fromNYTimes = ({ state, county }, sendData) => {
-  url = 'https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv'
+  let url = ''
+  if (county) {
+    url = 'https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv'
+  } else {
+    url = 'https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv'
+  }
+  
 
   // try {
   //   axios.get(url).then((data) => {
@@ -21,6 +27,7 @@ const fromNYTimes = ({ state, county }, sendData) => {
       sendData('Unable to connect to data source. Please try again.', undefined)
     } else {
       let date = false;
+      console.log(body)
       createJSON(body, date, state, county, sendData)
     }
   })

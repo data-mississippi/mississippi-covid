@@ -84,6 +84,60 @@ router.use('/docs', swaggerUi.serve, swaggerUi.setup(specs));
  *   
  */
 
+ /** 
+ * @swagger
+ * /api/v1/chronological/states:
+ *   get:
+ *     summary: Get a chronological list of daily case numbers for each US state
+ *     description: Returns a chronological list of total case count in every US state, starting with the first reported case. It only includes a state if there are any reported cases for that state. Each day includes the prior day’s count and adds to that count if there are any new cases. Can filter by state or return all states.
+ *        Sample query -- /api/v1/daily/chronological/states?state=mississippi
+ *     parameters:
+ *       - in: query
+ *         name: state
+ *         type: string
+ *         required: false
+ *     responses:
+ *       200:
+ *         description: A chronological list of total case numbers for each state.
+ *         schema: 
+ *           type: object
+ *           properties:
+ *             daily:
+ *               type: object
+ *               properties:
+ *                 source:
+ *                   description: Source for this data. Please attribute if you use it anywhere.
+ *                   type: string
+ *                 sourceURL:
+ *                   description: URL for the source.
+ *                   type: string
+ *                 state:
+ *                   description: The state where the cases are located.
+ *                   type: string
+ *                 results:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       date:
+ *                         description: Date for the the case count.
+ *                         type: string
+ *                       state:
+ *                         description: The state for the case count.
+ *                         type: string
+ *                       fips:
+ *                         description: Federal Information Processing Standard state code to uniquely identify states.
+ *                         type: string
+ *                       cases:
+ *                         description: Count of confirmed COVID-19 cases.
+ *                         type: string
+ *                       deaths:
+ *                         description: Deaths attributed to COVID-19.
+ *                         type: string
+ *   
+ */
+
+
 /**
  * @swagger
  * /api/v1/daily/us/counties:

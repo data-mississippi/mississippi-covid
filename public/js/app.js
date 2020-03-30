@@ -2,10 +2,12 @@
 const counties = document.querySelector('#counties')
 counties.textContent = ''
 
+
 window.onload = function() {
   counties.innerHTML = '<p>loading...</p>'
 
   const date = utcDate();
+  getStateChronoData();
   
   fetch(`/api/v1/daily/us/counties?date=${date}&state=mississippi`).then((response) => {
     response.json().then((data) => {
@@ -61,7 +63,9 @@ const generateTableHead = (table, data) => {
   let thead = table.createTHead();
   let row = thead.insertRow();
 
-  for (let key of data) {
+  const headers = ['county', 'confirmed', 'deaths'];
+
+  for (let key of headers) {
     let th = document.createElement("th");
     let text = document.createTextNode(key);
     th.appendChild(text);
@@ -72,11 +76,79 @@ const generateTableHead = (table, data) => {
 const generateTable = (table, data) => {
   for (let element of data) {
     let row = table.insertRow();
+    
+    let rowValues = {
+      county: element.county,
+      confirmed: element.confirmed,
+      deaths: element.deaths
+    }
 
-    for (key in element) {
+    for (key in rowValues) {
       let cell = row.insertCell();
       let text = document.createTextNode(element[key]);
       cell.appendChild(text);
     }
   }
+}
+
+let ctx = document.getElementById('chrono-chart-state').getContext('2d');
+
+let stateData = [];
+const getStateChronoData = () => {
+  fetch(`/api/v1/chronological/states?state=mississippi`).then((response) => {
+    response.json().then((data) => {
+      if (data.error) {
+        stateData = data.error;
+      } else {
+        stateData = data.chronological.results;
+
+        let stateDataLength = stateData.length;
+        let chartNumberOfDays = 30;
+        if (stateDataLength < chartNumberOfDays) {
+          chartNumberOfDays = stateDataLength
+        }
+
+        const daysOnChart = stateData.slice((stateDataLength - chartNumberOfDays), stateDataLength)
+
+        let dayLabels = daysOnChart.map((day) => {
+          return day.date;
+        })
+
+        let caseCounts = daysOnChart.map((day) => {
+          return day.cases;
+        })
+
+        let deathCounts = daysOnChart.map((day) => {
+          return day.deaths;
+        })
+
+        console.log(dayLabels)
+
+        let chart = new Chart(ctx, {
+          // The type of chart we want to create
+          type: 'line',
+      
+          // The data for our dataset
+          data: {
+              labels: dayLabels,
+              datasets: [{
+                  label: 'Confirmed Cases',
+                  backgroundColor: 'rgb(227, 83, 73)',
+                  borderColor: 'rgb(227, 83, 73)',
+                  data: caseCounts
+              }, {
+                label: 'Confirmed Deaths',
+                backgroundColor: 'rgb(235, 177, 52)',
+                borderColor: 'rgb(235, 177, 52)',
+                data: deathCounts
+            }
+            ]
+          },
+      
+          // Configuration options go here
+          options: {}
+      });
+      }
+    })
+  })
 }

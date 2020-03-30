@@ -18,10 +18,10 @@ const createJSON = (csv, date, state, county, sendData) => {
   }
 
   const csvFilterOptions = setCsvFilterOptions(state, oldFormat, nytimes);
-  const jsonOptions = setJsonOptions(oldFormat, nytimes);
+  const jsonOptions = setJsonOptions(oldFormat, nytimes, county, state);
 
   
-  if (nytimes && !state && county == 'all') {
+  if (nytimes && !state && county === 'all' || nytimes && state ==='all' && !county) {
     // can't filter csv that doesn't need filtering, so only convert json
     csvToJSON(jsonOptions).fromString(csv).then((jsonArray) => {
       if (jsonArray.length === 0) {
@@ -52,7 +52,7 @@ const createJSON = (csv, date, state, county, sendData) => {
 
 }
 
-const setJsonOptions = (oldFormat, nytimes) => {
+const setJsonOptions = (oldFormat, nytimes, county, state) => {
   let jsonOptions = {
     output: 'json',
     noheader: 'true',
@@ -68,10 +68,15 @@ const setJsonOptions = (oldFormat, nytimes) => {
     }
   }
 
-  if (nytimes) {
+  if (nytimes && county) {
     jsonOptions = {
       output: 'json',
       headers: ['date', 'county', 'state', 'fips', 'cases', 'deaths']
+    }
+  } else if (nytimes && state) {
+    jsonOptions = {
+      output: 'json',
+      headers: ['date', 'state', 'fips', 'cases', 'deaths']
     }
   }
 
