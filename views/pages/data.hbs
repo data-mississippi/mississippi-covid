@@ -10,24 +10,43 @@
   <body>
     <div class="main-content">
       {{> header}}
-      <p>
-        Although this website is for Mississippi, an open API exists for querying Coronavirus data. 
-        The data is from Johns Hopkins University, but the goal is to source more data. 
-        Working on adding the New York Times data.
-      </p>
-      <p>
-        Johns Hopkins updates their data everyday at 23:59 UTC (7pm central time). We query the most recent data.
-        It comes <a href="https://github.com/CSSEGISandData/COVID-19" target="_blank">from here.</a>
-      </p>
-      <p>Here is <a href="/api/v1/docs" target="_blank">the api documentation.</a></p>
-      <p>
-        The code is <a href="https://github.com/smcalilly/mississippi-covid">available here.</a> 
-        Please open an issue if you find a bug. And feel free to contribute, but excuse the mess!
-        It's my first ExpressJS app.
-      </p>
-
-      
-
+      <section>
+        <p>
+        Although this website is for Mississippi, <a href="/api/v1/docs" target="_blank">an open API</a> exists for querying Coronavirus data.
+        </p>
+        <p>
+          Data is currently available from two sources: 
+            <ol>
+              <li><strong>The New York Times</strong></li>
+                <p>Their data is a chronological list of case counts for each day, since the first confirmed case in January. 
+                  This is a good endpoint to query if you want to make data charts to see growth rates based counties and states.
+                </p>
+                <p>New York Times updates their data daily. It's sourced <a href="https://github.com/nytimes/covid-19-data">from here.</a></p>
+              <li><strong>Johns Hopkins University</strong></li>
+                <p>
+                  This data provides a snapshot of each day's cases, based on county and state. Note that they didn't start sharing county data until 03-23-2020.
+                </p>
+                <p>
+                  Johns Hopkins updates their data everyday at 23:59 UTC (7pm central time). We query the most recent data.
+                  It comes <a href="https://github.com/CSSEGISandData/COVID-19" target="_blank">from here.</a>
+                </p>
+            </ol> 
+        </p>
+        <p>
+          During the process of compiling this data, we've found that a lot of different sources conflict each other. 
+          Our goal is to share as many sources as possible, to overcome these discrepancies. 
+          We're constantly adding new data sources, so check back here for any additions to our list.
+          We also keep <a href="/api/v1/docs" target="_blank">the api documentation.</a> up-to-date. 
+        </p>
+        <p>
+          <strong>Here is <a href="/api/v1/docs" target="_blank">the api documentation</a> </strong>in case you missed it.
+        </p>
+        <p>
+          The code is <a href="https://github.com/smcalilly/mississippi-covid">available here.</a> 
+          Please open an issue if you find a bug. And feel free to contribute, but excuse the mess!
+          It's my first ExpressJS app.
+        </p>
+      </section>
     </div>
     
     {{> footer }} 

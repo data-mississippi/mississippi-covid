@@ -48,6 +48,11 @@ a.email {
   width: 250px;
 }
 
+.updates {
+  display: flex;
+  flex-direction: row;
+}
+
 #counties {
   display: flex;
   flex-direction: column;

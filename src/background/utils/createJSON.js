@@ -33,6 +33,7 @@ const createJSON = (csv, date, state, county, sendData) => {
   } else {
     // i guess this is the callback hell they speak of, i'm not a fan
     csvFilterSort.filter(csv, csvFilterOptions, (error, filteredCSV) => {
+      console.log('filteredCSV', filteredCSV)
       csvToJSON(jsonOptions).fromString(filteredCSV).then((jsonArray) => {
         if (jsonArray.length === 0) {
           sendData('No results found for that query. Please try again.', undefined)
@@ -54,12 +55,14 @@ const createJSON = (csv, date, state, county, sendData) => {
 const setJsonOptions = (oldFormat, nytimes) => {
   let jsonOptions = {
     output: 'json',
+    noheader: 'true',
     headers: ['fips', 'county', 'state', 'country', 'lastUpdated', 'latitude', 'longitude', 'confirmed', 'deaths', 'recovered', 'active', 'combinedKey'],
     ignoreColumns: /(country|latitude|longitude|recovered|active|combinedKey)/
   }
 
   if (oldFormat) {
     jsonOptions = {
+      noheader: 'true',
       headers: ['provinceState', 'countryRegion', 'lastUpdated', 'confirmed', 'deaths', 'recovered', 'latitude', 'longitude'],
       ignoreColumns: /(countryRegion|recovered|latitude|longitude)/
     }
@@ -145,25 +148,34 @@ const filterByCounty = (jsonArray, county) => {
 const countStateCases = (jsonArray) => {
   let stateMap = {}
 
+  
+
   jsonArray.forEach(json => {
     let currentState = json.state;
+    let currentConfirmed = json.confirmed;
+    let currentDeaths = json.deaths;
     
     if (!stateMap.hasOwnProperty(currentState)) {
+      console.log('state not in map')
+      
       let stateTotal = {
         state: currentState,
         confirmed: 0,
         deaths: 0,
-        lastUpdated: jsonArray[0].lastUpdated
+        lastUpdated: json.lastUpdated
       }
       stateMap[currentState] = stateTotal;
-      stateMap[currentState].confirmed += parseInt(json.confirmed)
-      stateMap[currentState].deaths += parseInt(json.deaths)
-      stateMap[currentState].lastUpdated = json.lastUpdated
+      stateMap[currentState].confirmed += parseInt(currentConfirmed)
+      stateMap[currentState].deaths += parseInt(currentDeaths)
     } else {
-      stateMap[currentState].confirmed += parseInt(json.confirmed)
-      stateMap[currentState].deaths += parseInt(json.deaths)
+      stateMap[currentState].confirmed += parseInt(currentConfirmed)
+      stateMap[currentState].deaths += parseInt(currentDeaths)
     }
+
+    console.log(json)
+    
   })
+  console.log('stateMap', stateMap);
 
   let stateArray = Object.values(stateMap)
 
