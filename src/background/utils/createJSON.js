@@ -19,7 +19,6 @@ const createJSON = (csv, date, state, county, sendData) => {
 
   const csvFilterOptions = setCsvFilterOptions(state, oldFormat, nytimes);
   const jsonOptions = setJsonOptions(oldFormat, nytimes, county, state);
-
   
   if (nytimes && !state && county === 'all' || nytimes && state ==='all' && !county) {
     // can't filter csv that doesn't need filtering, so only convert json
@@ -153,16 +152,12 @@ const filterByCounty = (jsonArray, county) => {
 const countStateCases = (jsonArray) => {
   let stateMap = {}
 
-  
-
   jsonArray.forEach(json => {
     let currentState = json.state;
     let currentConfirmed = json.confirmed;
     let currentDeaths = json.deaths;
     
     if (!stateMap.hasOwnProperty(currentState)) {
-      console.log('state not in map')
-      
       let stateTotal = {
         state: currentState,
         confirmed: 0,
@@ -176,11 +171,7 @@ const countStateCases = (jsonArray) => {
       stateMap[currentState].confirmed += parseInt(currentConfirmed)
       stateMap[currentState].deaths += parseInt(currentDeaths)
     }
-
-    console.log(json)
-    
   })
-  console.log('stateMap', stateMap);
 
   let stateArray = Object.values(stateMap)
 

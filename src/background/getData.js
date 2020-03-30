@@ -9,25 +9,12 @@ const fromNYTimes = ({ state, county }, sendData) => {
   } else {
     url = 'https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv'
   }
-  
-
-  // try {
-  //   axios.get(url).then((data) => {
-  //     let date = false;
-  //     console.log(typeof(data))
-  //     createJSON(data, date, state, county, sendData)
-  //   })
-  // } catch(error) {
-  //   console.log(error)
-  //   sendData('Unable to connect to data source. Please try again.', undefined)
-  // }
 
   request.get(url, (error, { body } = {}) => {
     if (error) {
       sendData('Unable to connect to data source. Please try again.', undefined)
     } else {
       let date = false;
-      console.log(body)
       createJSON(body, date, state, county, sendData)
     }
   })
