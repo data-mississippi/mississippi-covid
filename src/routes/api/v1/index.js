@@ -142,7 +142,7 @@ router.use('/docs', swaggerUi.serve, swaggerUi.setup(specs));
  * @swagger
  * /api/v1/daily/us/counties:
  *   get:
- *     summary: Get each US county's daily case numbers
+ *     summary: Get a daily snapshot for each US county's case numbers
  *     description: Returns one single day for all US counties. Date is required. Can filter by state and county. NOTE -- county data is not available before 03-23-2020, only state data. 
  *        Sample query -- /api/v1/daily/us/counties?date=03-24-2020&state=mississippi
  *     parameters:
@@ -205,7 +205,7 @@ router.use('/docs', swaggerUi.serve, swaggerUi.setup(specs));
  * @swagger
  * /api/v1/daily/us/states:
  *   get:
- *     summary: Get total case numbers for each US state.
+ *     summary: Get a snapshot for each US state's total case numbers.
  *     description: Returns a single day for all US counties. Date is required. Can filter by state.
  *        Sample query -- /api/v1/daily/us/states?date=03-28-2020&state=mississippi
  *     parameters:
