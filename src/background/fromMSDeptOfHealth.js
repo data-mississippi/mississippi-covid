@@ -4,9 +4,19 @@ const cheerio = require('cheerio');
 const fromMSDeptOfHealth = (query, returnResponse) => {
   const url = 'https://msdh.ms.gov/msdhsite/_static/14,0,420.html';
 
+  const date = new Date();
+  let dateArray = date.toLocaleDateString('en-US').split('/');
+  let formattedDate = `${dateArray[2]}-${dateArray[0]}-${dateArray[1]}`
+  console.log(formattedDate)
   axios.get(url).then((response) => {
     let msCountyCases = parseDOM(response.data);
-    returnResponse(undefined, msCountyCases);
+    const mississippi = {
+      source: 'Mississippi State Department of Health',
+      sourceURL: url,
+      date: formattedDate,
+      results: msCountyCases 
+    }
+    returnResponse(undefined, mississippi);
   }).catch(error => {
     console.log(error);
   })

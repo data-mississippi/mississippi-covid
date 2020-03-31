@@ -1,23 +1,43 @@
-const counties = document.querySelector('#counties')
+const counties = document.getElementById('counties')
+const countiesBarChart = document.getElementById('counties-bar-chart')
+const stateChart = document.getElementById('chrono-chart-state')
+const loading = document.getElementsByClassName('loading')
 counties.textContent = ''
 
+let mississippiCounties = {}
 
-const getMSDeptOfHealthData = () => {
+
+const getAndRenderMsData = () => {
+  loading.innerHTML = 'loading...'
+
   fetch('api/v1/mississippi').then((response) => {
     response.json().then((data) => {
-      renderTable(data)
-      console.log(data)
-      let totalCountToday = data.pop()
-      console.log(totalCountToday)
-      totalCountToday.date = '2020-03-30'
+      return data;
+    }).then((data) => {
+      mississippiCounties = data;
+
+      // get the last item in today's count 
+      // to merge with chrono data. i'm getting today's
+      // count from ms dept of health and chrono from nytimes,
+      // otherwise this wouldn't be necessary if this came from my own db
+      let totalCountToday = mississippiCounties.results.pop();
+      totalCountToday.date = mississippiCounties.date;
       getStateChronoData(totalCountToday);
+
+      return mississippiCounties;
+    }).then((data) => {
+      renderTable(data)
     })
+  }).catch(error => {
+    loading.innerHTML = ''
+    counties.innerHTML = ''
+    stateChart.innerHTML = data.error;
+    counties.innerHTML = data.error;
+    console.log(error);
   })
 }
 
 const renderTable = (data) => {
-  const date = utcDate();
-
   counties.innerHTML = ''
     if (data.error) {
       counties.innerHTML = ''
@@ -25,61 +45,39 @@ const renderTable = (data) => {
     } else {
       counties.innerHTML = ''
 
-      // create date context descript and table
-      //let date = `Mississippi cases as of ${data.daily.date}`
+      // let ctx = countiesBarChart.getContext('2d');
+      // let myBarChart = new Chart(ctx, {
+      //   type: 'horizontalBar',
+      //   data: {
+      //     labels: ['Lee', 'Alcorn'],
+      //     datasets: [
+      //       {
+      //           label: "Test",
+      //           data: [100, 75],
+      //           backgroundColor: ["#669911", "#119966" ],
+      //           hoverBackgroundColor: ["#66A2EB", "#FCCE56"]
+      //       }]
+      //   },
+      // });
+
       let dateHeader = document.createElement('h3')
       dateHeader.id = 'counties-header'
-      let text = document.createTextNode(`Mississippi cases as of ${date}`)
+      let text = document.createTextNode(`Mississippi cases as of ${data.date}`)
       dateHeader.appendChild(text);
       counties.appendChild(dateHeader)
 
       let table = document.createElement('table');
       counties.appendChild(table)
 
-      let header = Object.keys(data[0])
+      let header = Object.keys(data.results[0])
 
       generateTableHead(table, header);
-      generateTable(table, data)
+      generateTable(table, data.results)
     }
   }
 
 window.onload = async function() {
-  counties.innerHTML = '<p>loading...</p>'
-
-  
-  getMSDeptOfHealthData();
-
-
-  
-  
-  
-  // await fetch(`/api/v1/daily/us/counties?date=${date}&state=mississippi`).then((response) => {
-  //   response.json().then((data) => {
-  //     counties.innerHTML = ''
-  //     if (data.error) {
-  //       counties.innerHTML = ''
-  //       counties.innerHTML = data.error
-  //     } else {
-  //       counties.innerHTML = ''
-
-  //       // create date context descript and table
-  //       let date = `Mississippi cases as of ${data.daily.date}`
-  //       let dateHeader = document.createElement('h3')
-  //       dateHeader.id = 'counties-header'
-  //       let text = document.createTextNode(date)
-  //       dateHeader.appendChild(text);
-  //       counties.appendChild(dateHeader)
-
-  //       let table = document.createElement('table');
-  //       counties.appendChild(table)
-
-  //       let header = Object.keys(data.daily.results[0])
-
-  //       generateTableHead(table, header);
-  //       generateTable(table, data.daily.results)
-  //     }
-  //   })
-  // })
+  getAndRenderMsData();
 }
 
 const utcDate = () => {
@@ -135,22 +133,16 @@ const generateTable = (table, data) => {
   }
 }
 
-let ctx = document.getElementById('chrono-chart-state').getContext('2d');
-
-let stateData = [];
 const getStateChronoData = (totalCountToday) => { 
   fetch(`/api/v1/chronological/states?state=mississippi`).then((response) => {
+    let stateData = [];
+
     response.json().then((data) => {
       if (data.error) {
         stateData = data.error;
       } else {
         stateData = data.chronological.results;
-        
-        
         stateData.push(totalCountToday)
-
-        console.log(totalCountToday)
-        console.log(stateData)
 
         let stateDataLength = stateData.length;
         let chartNumberOfDays = 30;
@@ -172,7 +164,8 @@ const getStateChronoData = (totalCountToday) => {
           return day.deaths;
         })
 
-        let chart = new Chart(ctx, {
+        let ctx = stateChart.getContext('2d');
+        let lineChart = new Chart(ctx, {
           // The type of chart we want to create
           type: 'line',
       
@@ -191,11 +184,8 @@ const getStateChronoData = (totalCountToday) => {
                 data: deathCounts
               }
             ]
-          },
-      
-          // Configuration options go here
-          options: {}
-      });
+          }
+        });
       }
     })
   })
