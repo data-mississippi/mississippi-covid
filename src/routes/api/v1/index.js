@@ -3,9 +3,11 @@ const swaggerJSDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
 const daily = require('./daily');
 const chronological = require('./chronological');
+const mississippi = require('./mississippi')
 
 router.use('/daily', daily);
 router.use('/chronological', chronological);
+router.use('/mississippi', mississippi);
 
 // setup swagger
 const swaggerDefinition = {
