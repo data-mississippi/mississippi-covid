@@ -163,7 +163,7 @@ const generateTable = (table, data) => {
 
 const formatDate = (date) => {
   let dates = date.split('-');
-  let formattedDate = `${dates[1]}-${dates[2]}`
+  let formattedDate = `${dates[1].replace('0', '')}/${dates[2]}`
   return formattedDate;
 }
 
@@ -187,7 +187,7 @@ const getStateChronoData = (totalCountToday) => {
         stateData.push(totalCountToday)
 
         let stateDataLength = stateData.length;
-        let chartNumberOfDays = 30;
+        let chartNumberOfDays = 14;
         if (stateDataLength < chartNumberOfDays) {
           chartNumberOfDays = stateDataLength
         }
