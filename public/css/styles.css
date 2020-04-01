@@ -92,7 +92,7 @@ footer a {
 
 .ct-series-b .ct-line,
 .ct-series-b .ct-point {
-  stroke: rgb(219, 146, 0);
+  stroke: #333333;
 }
 
 .footer {
