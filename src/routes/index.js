@@ -39,11 +39,11 @@ router.get('/news/rss', (req, res) => {
   })
 })
 
-router.get('/resources', (req, res) => {
-  res.render('resources', {
-    title: 'resources',
-    helpText: 'Coronavirus outreach for Mississippi communities -- information and donate'
-  })
-})
+// router.get('/resources', (req, res) => {
+//   res.render('resources', {
+//     title: 'resources',
+//     helpText: 'Coronavirus outreach for Mississippi communities -- information and donate'
+//   })
+// })
 
 module.exports = router;
