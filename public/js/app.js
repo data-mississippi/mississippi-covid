@@ -21,6 +21,8 @@ const getAndRenderMsData = () => {
       // otherwise this wouldn't be necessary if this came from my own db
       let totalCountToday = mississippiCounties.results.pop();
       totalCountToday.date = mississippiCounties.date;
+
+      console.log(totalCountToday)
       getStateChronoData(totalCountToday);
 
       return mississippiCounties;
@@ -165,6 +167,8 @@ const getStateChronoData = (totalCountToday) => {
         stateData = data.error;
       } else {
         stateData = data.chronological.results;
+
+        console.log(stateData)
         stateData.push(totalCountToday)
 
         let stateDataLength = stateData.length;
@@ -181,7 +185,7 @@ const getStateChronoData = (totalCountToday) => {
         })
 
         let caseCounts = daysOnChart.map((day) => {
-          return day.cases;
+          return day.cases.replace(',', '');
         })
 
         let deathCounts = daysOnChart.map((day) => {
