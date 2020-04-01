@@ -1,13 +1,13 @@
 const counties = document.getElementById('counties')
 const countiesBarChart = document.getElementById('counties-bar-chart')
 const stateChart = document.getElementById('chrono-chart-state')
-const loading = document.getElementsByClassName('loading')
+const status = document.getElementById('status')
 counties.textContent = ''
 
 let mississippiCounties = {}
 
 const getAndRenderMsData = () => {
-  loading.innerHTML = 'loading...'
+  status.innerHTML = 'loading...'
 
   fetch('api/v1/mississippi').then((response) => {
     response.json().then((data) => {
@@ -23,6 +23,7 @@ const getAndRenderMsData = () => {
       totalCountToday.date = mississippiCounties.date;
 
       console.log(totalCountToday)
+      status.innerHTML = `${totalCountToday.cases} total COVID-19 cases in Mississippi`
       getStateChronoData(totalCountToday);
 
       return mississippiCounties;
@@ -55,8 +56,19 @@ const renderTable = (data) => {
       data.results.forEach((county) => {
         let name = county.county
         countyNames.push(name)
-        cases.push(county.cases)
-        deaths.push(county.deaths)
+
+        let caseCount = {
+          meta: 'Cases', 
+          value: county.cases
+        }
+
+        let deathCount = {
+          meta: 'Deaths',
+          value: county.deaths
+        }
+
+        cases.push(caseCount)
+        deaths.push(deathCount)
       })
 
       new Chartist.Bar('#chart2', {
@@ -72,7 +84,10 @@ const renderTable = (data) => {
           offset: 70
         },
         width: '100%',
-        height: '1000px'
+        height: '1000px',
+        plugins: [
+          Chartist.plugins.tooltip()
+        ]
       });
 
       let dateHeader = document.createElement('h3')
@@ -184,12 +199,24 @@ const getStateChronoData = (totalCountToday) => {
           return date;
         })
 
+
+
         let caseCounts = daysOnChart.map((day) => {
-          return day.cases.replace(',', '');
+          let caseCount = {
+            meta: 'Cases', 
+            value: day.cases.replace(',', '')
+          }
+  
+          
+          return caseCount;
         })
 
         let deathCounts = daysOnChart.map((day) => {
-          return day.deaths;
+          let deathCount = {
+            meta: 'Deaths',
+            value: day.deaths
+          }
+          return deathCount;
         })
 
         new Chartist.Line('#chart1', {
