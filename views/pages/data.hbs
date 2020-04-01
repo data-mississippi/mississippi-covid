@@ -5,23 +5,26 @@
     <title>data</title>
     <link rel="icon" href="/img/ms-outline.jpeg">
     <link rel="stylesheet" href="./css/styles.css">
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
   </head>
 
   <body>
     <div class="main-content">
       {{> header}}
-      <section>
-        <p>
+      <section class="about-data">
+        <div>
+          <p>
         Although this website is for Mississippi, an open API exists for querying Coronavirus data.  <strong>Here is <a href="/api/v1/docs" target="_blank">the api documentation</a></strong>.
         </p>
         <p>
-          Data is currently available from two sources: 
+          During the process of compiling this data, we've found that a lot of different sources conflict each other. 
+          We aim to overcome these discrepancies by sharing as many sources as possible. 
+          We're constantly adding new data sources, so check back here for any additions to our list.
+          We also keep <a href="/api/v1/docs" target="_blank">the api documentation</a> up-to-date. 
+        </p>
+        <p>
+          Data is currently available from three sources: 
             <ol>
-              <li><strong>The New York Times</strong></li>
-                <p>Their data is a chronological list of case counts for each day, since the first confirmed case in January. 
-                  This is a good endpoint to query if you want to make data charts to see growth rates based counties and states.
-                </p>
-                <p>New York Times updates their data daily. It's sourced <a href="https://github.com/nytimes/covid-19-data">from here.</a></p>
               <li><strong>Johns Hopkins University</strong></li>
                 <p>
                   This data provides a snapshot of each day's cases, based on county and state. Note that they didn't start sharing county data until 03-23-2020.
@@ -30,13 +33,16 @@
                   Johns Hopkins updates their data everyday at 23:59 UTC (7pm central time). We query the most recent data.
                   It comes <a href="https://github.com/CSSEGISandData/COVID-19" target="_blank">from here.</a>
                 </p>
+              <li><strong>The New York Times</strong></li>
+                <p>Their data is a chronological list of case counts for each day, since the first confirmed case in January. 
+                  This is a good endpoint to query if you want to make data charts to see growth rates based counties and states.
+                </p>
+                <p>New York Times updates their data daily. It's sourced <a href="https://github.com/nytimes/covid-19-data">from here.</a></p>
+              <li><strong>Mississippi State Department of Health</strong></li>
+                <p>We've found that MSDH has the most up-to-date numbers than anybody, so we constantly for updates. 
+                  That API is still being refined and it has no documentation, but if you want to try it out, you can get from
+                  the <code>/mississippi</code> endpoint.</p>
             </ol> 
-        </p>
-        <p>
-          During the process of compiling this data, we've found that a lot of different sources conflict each other. 
-          Our goal is to share as many sources as possible, to overcome these discrepancies. 
-          We're constantly adding new data sources, so check back here for any additions to our list.
-          We also keep <a href="/api/v1/docs" target="_blank">the api documentation.</a> up-to-date. 
         </p>
         <p>
           <strong>Here is <a href="/api/v1/docs" target="_blank">the api documentation</a> </strong>in case you missed it.
@@ -46,6 +52,8 @@
           Please open an issue if you find a bug. And feel free to contribute, but excuse the mess!
           It's my first ExpressJS app.
         </p>
+        </div>
+        
       </section>
     </div>
     

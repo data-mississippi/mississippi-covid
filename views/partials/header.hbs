@@ -1,8 +1,23 @@
+<script>
+  let currentLinks = document.querySelectorAll('a[href="'+document.URL+'"]')
+  currentLinks.forEach((link) => {
+      link.className += ' current-link'
+  });
+</script>
 <header>
-  <h1>{{title}}</h1>
+  <div class="header">
+    <img class="header-img" src="/img/ms-black-mid.png"> 
+    <h1 >{{title}}</h1>
+  </div>
+  
+  
+  <div class="menu">
+    <a href="/">home</a>
+    <a href="/data">open data</a>
+    <a href="/news">news</a>
+    <a href="/about">about</a>
+  </div>
+  
 
-  <a href="/">home</a>
-  <a href="/data">open data</a>
-  <a href="/news">news</a>
-  <a href="/about">about</a>
+  
 </header>

@@ -28,7 +28,7 @@ h1 {
 
 header a {
   color: #888888;
-  margin-right: 16px;
+  margin-left: 16px;
   text-decoration: none;
 }
 
@@ -49,8 +49,12 @@ tr:nth-child(even) {
   background-color: rgb(208, 232, 247);
 }
 
-a.email {
-  color: #add8e6;
+a {
+  color: rgb(96, 171, 89)
+}
+
+footer a {
+  color: rgb(165, 136, 181);
 }
 
 .main-content {
@@ -79,3 +83,66 @@ a.email {
 .ct-series-a .ct-bar {
   stroke: rgb(51, 90, 161)
 }
+
+.ct-series-a .ct-line,
+.ct-series-a .ct-point {
+  stroke: rgb(51, 90, 161);
+  background-color: rgb(208, 232, 247);
+}
+
+.ct-series-b .ct-line,
+.ct-series-b .ct-point {
+  stroke: rgb(219, 146, 0);
+}
+
+.footer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.about-data {
+  margin: 0 auto;
+  width: 80%;
+}
+
+.current-link {
+  color: #add8e6;
+}
+
+.header {
+  text-decoration: underline;
+  text-decoration-color: #add8e6;
+  display: flex;
+  flex-direction: row;
+  text-align: left;
+  align-items: center;
+}
+
+.header-img {
+  height: 15%;
+  margin-top: 5%;
+  margin-right: 5px;
+}
+
+/* .menu {
+  text-align: right;
+} */
+
+@media only screen and (max-width: 815px) {
+  h1 {
+    font-size: 34px;
+  }
+  .header {
+    text-decoration: underline;
+    text-decoration-color: #add8e6;
+    display: flex;
+    flex-direction: row;
+  }
+
+  .header-img {
+    height: 100%;
+    margin-top: 8%;
+  }
+}
+

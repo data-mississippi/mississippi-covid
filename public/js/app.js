@@ -6,7 +6,6 @@ counties.textContent = ''
 
 let mississippiCounties = {}
 
-
 const getAndRenderMsData = () => {
   loading.innerHTML = 'loading...'
 
@@ -58,7 +57,7 @@ const renderTable = (data) => {
         deaths.push(county.deaths)
       })
 
-      new Chartist.Bar('.ct-chart', {
+      new Chartist.Bar('#chart2', {
         labels: countyNames,
         series: [
           cases
@@ -189,39 +188,54 @@ const getStateChronoData = (totalCountToday) => {
           return day.deaths;
         })
 
-        let ctx = stateChart.getContext('2d');
-        let lineChart = new Chart(ctx, {
-          type: 'line',
-          data: {
-              labels: dayLabels,
-              datasets: [{
-                  label: 'Cases',
-                  backgroundColor: 'rgb(208, 232, 247)',
-                  borderColor: 'rgb(51, 90, 161)',
-                  pointBackgroundColor: 'rgb(51, 90, 161)',
-                  data: caseCounts
-              }, {
-                label: 'Deaths',
-                backgroundColor: 'rgb(219, 146, 0)',
-                borderColor: 'rgb(219, 146, 0)',
-                data: deathCounts
-              }
-            ]
+        new Chartist.Line('#chart1', {
+          labels: dayLabels,
+          series: [
+            caseCounts, deathCounts
+          ]
+        }, {
+          fullWidth: true,
+          chartPadding: {
+            right: 40
           },
-          options: {
-            title: {
-              display: true,
-              text: `Mississippi Covid-19 cases as of ${formatDate(totalCountToday.date)}`,
-              fontSize: '18',
-              fontFamily: 'Helvetica'
-            },
-            legend: {
-              display: true,
-              position: 'bottom'
-            }
-            
-          }
+          plugins: [
+            Chartist.plugins.tooltip()
+          ]
         });
+
+        // let ctx = stateChart.getContext('2d');
+        // let lineChart = new Chart(ctx, {
+        //   type: 'line',
+        //   data: {
+        //       labels: dayLabels,
+        //       datasets: [{
+        //           label: 'Cases',
+        //           backgroundColor: 'rgb(208, 232, 247)',
+        //           borderColor: 'rgb(51, 90, 161)',
+        //           pointBackgroundColor: 'rgb(51, 90, 161)',
+        //           data: caseCounts
+        //       }, {
+        //         label: 'Deaths',
+        //         backgroundColor: 'rgb(219, 146, 0)',
+        //         borderColor: 'rgb(219, 146, 0)',
+        //         data: deathCounts
+        //       }
+        //     ]
+        //   },
+        //   options: {
+        //     title: {
+        //       display: true,
+        //       text: `Mississippi Covid-19 cases as of ${formatDate(totalCountToday.date)}`,
+        //       fontSize: '18',
+        //       fontFamily: 'Helvetica'
+        //     },
+        //     legend: {
+        //       display: true,
+        //       position: 'bottom'
+        //     }
+            
+        //   }
+        // });
       }
     })
   })

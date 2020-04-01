@@ -5,15 +5,16 @@
     <title>news</title>
     <link rel="icon" href="/img/ms-outline.jpeg">
     <link rel="stylesheet" href="./css/styles.css">
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
   </head>
 
   <body>
     <div class="main-content">
       {{> header}}
-      <div>
+      <div class="about-data">
         <h2>News from Mississippi Today</h2>
         {{#each feed as |item|}}
-          <a href="{{item.link}}">{{item.title}}</p>
+          <a href="{{item.link}}">{{item.title}}</a></p>
         {{/each}}
       </div>
     </div>
