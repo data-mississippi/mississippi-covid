@@ -100,7 +100,7 @@ footer a {
   margin : 0 0 30px 0;
 }
 
-.ct-chart .ct-label.ct-horizontal.ct-end {
+#chart1 .ct-label.ct-horizontal.ct-end {
   position: relative;
   justify-content: flex-end;
   text-align: right;
