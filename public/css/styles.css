@@ -36,6 +36,19 @@ table {
   text-align: center;
 }
 
+tr {
+  height: 40px;
+  color: #333333
+}
+
+th {
+  color: #888888
+}
+
+tr:nth-child(even) {
+  background-color: rgb(208, 232, 247);
+}
+
 a.email {
   color: #add8e6;
 }
@@ -61,4 +74,8 @@ a.email {
 
 #counties-header {
   text-align: center;
+}
+
+.ct-series-a .ct-bar {
+  stroke: rgb(51, 90, 161)
 }

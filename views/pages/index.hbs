@@ -4,6 +4,12 @@
   <head>
     <title>mississippi covid</title>
     <link rel="icon" href="/img/ms-outline.jpeg">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-sparklines/2.1.2/jquery.sparkline.min.js"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es2016%2Ces6%2Cfetch%2CPromise"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
+    <script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
     <link rel="stylesheet" href="/css/styles.css">
   </head>
 
@@ -15,31 +21,27 @@
       <canvas id="chrono-chart-state">
 
       </canvas>
+      <p style="text-align: center">This is the latest data from the Mississippi State Health Department.
+        <a href="https://msdh.ms.gov/msdhsite/_static/14,0,420.html" target="_blank">See the raw data</a></p>
       <br/>
       <hr/>
       <br/>
-      <div class="updates">
-        <div id="counties">
+      <div class="ct-chart ct-horizontal-bars">
+      </div>
+
+      <div id="counties">
           <p id="counties-date"></p>
           <table id="table">
           </table>
           
         </div>
-        <canvas id="counties-bar-chart">
-
-          </canvas>
-      </div>
       
       
 
-      <p>This data is taken from Johns Hopkins University. It updates daily at 7pm CDT. 
-        <a href="https://github.com/CSSEGISandData/COVID-19" target="_blank">See the raw data</a></p>
+      
     </main>
     
     {{> footer }} 
-
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es2016%2Ces6%2Cfetch%2CPromise"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="/js/app.js"></script>
   </body>
 </html>

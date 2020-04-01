@@ -45,31 +45,42 @@ const renderTable = (data) => {
     } else {
       counties.innerHTML = ''
 
-      // let ctx = countiesBarChart.getContext('2d');
-      // let myBarChart = new Chart(ctx, {
-      //   type: 'horizontalBar',
-      //   data: {
-      //     labels: ['Lee', 'Alcorn'],
-      //     datasets: [
-      //       {
-      //           label: "Test",
-      //           data: [100, 75],
-      //           backgroundColor: ["#669911", "#119966" ],
-      //           hoverBackgroundColor: ["#66A2EB", "#FCCE56"]
-      //       }]
-      //   },
-      // });
+      let countyNames = ['Counties'];
+      let cases = [];
+      let deaths = [];
+
+      let header = data.results.shift();
+
+      data.results.forEach((county) => {
+        console.log(county)
+        let name = county.county
+        countyNames.push(name)
+        cases.push(county.cases)
+        deaths.push(county.deaths)
+      })
+
+      new Chartist.Bar('.ct-chart', {
+        labels: countyNames,
+        series: [
+          cases
+        ]
+      }, {
+        seriesBarDistance: 10,
+        reverseData: true,
+        horizontalBars: true,
+        axisY: {
+          offset: 70
+        },
+        width: '100%',
+        height: '1000px'
+      });
 
       let dateHeader = document.createElement('h3')
       dateHeader.id = 'counties-header'
-      let text = document.createTextNode(`Mississippi cases as of ${data.date}`)
-      dateHeader.appendChild(text);
       counties.appendChild(dateHeader)
 
       let table = document.createElement('table');
       counties.appendChild(table)
-
-      let header = Object.keys(data.results[0])
 
       generateTableHead(table, header);
       generateTable(table, data.results)
@@ -133,6 +144,12 @@ const generateTable = (table, data) => {
   }
 }
 
+const formatDate = (date) => {
+  let dates = date.split('-');
+  let formattedDate = `${dates[1]}-${dates[2]}`
+  return formattedDate;
+}
+
 const getStateChronoData = (totalCountToday) => { 
   fetch(`/api/v1/chronological/states?state=mississippi`).then((response) => {
     let stateData = [];
@@ -153,7 +170,8 @@ const getStateChronoData = (totalCountToday) => {
         const daysOnChart = stateData.slice((stateDataLength - chartNumberOfDays), stateDataLength)
 
         let dayLabels = daysOnChart.map((day) => {
-          return day.date;
+          let date = formatDate(day.date)
+          return date;
         })
 
         let caseCounts = daysOnChart.map((day) => {
@@ -166,24 +184,35 @@ const getStateChronoData = (totalCountToday) => {
 
         let ctx = stateChart.getContext('2d');
         let lineChart = new Chart(ctx, {
-          // The type of chart we want to create
           type: 'line',
-      
-          // The data for our dataset
           data: {
               labels: dayLabels,
               datasets: [{
-                  label: 'Confirmed Cases',
-                  backgroundColor: 'rgb(227, 83, 73)',
-                  borderColor: 'rgb(227, 83, 73)',
+                  label: 'Cases',
+                  backgroundColor: 'rgb(208, 232, 247)',
+                  borderColor: 'rgb(51, 90, 161)',
+                  pointBackgroundColor: 'rgb(51, 90, 161)',
                   data: caseCounts
               }, {
-                label: 'Confirmed Deaths',
-                backgroundColor: 'rgb(235, 177, 52)',
-                borderColor: 'rgb(235, 177, 52)',
+                label: 'Deaths',
+                backgroundColor: 'rgb(219, 146, 0)',
+                borderColor: 'rgb(219, 146, 0)',
                 data: deathCounts
               }
             ]
+          },
+          options: {
+            title: {
+              display: true,
+              text: `Mississippi Covid-19 cases as of ${formatDate(totalCountToday.date)}`,
+              fontSize: '18',
+              fontFamily: 'Helvetica'
+            },
+            legend: {
+              display: true,
+              position: 'bottom'
+            }
+            
           }
         });
       }
