@@ -52,7 +52,6 @@ const renderTable = (data) => {
       let header = data.results.shift();
 
       data.results.forEach((county) => {
-        console.log(county)
         let name = county.county
         countyNames.push(name)
         cases.push(county.cases)
@@ -116,7 +115,7 @@ const generateTableHead = (table, data) => {
   let thead = table.createTHead();
   let row = thead.insertRow();
 
-  const headers = ['county', 'cases', 'deaths'];
+  const headers = ['county', 'cases', 'deaths', 'cases per 1000', 'population'];
 
   for (let key of headers) {
     let th = document.createElement("th");
@@ -133,7 +132,9 @@ const generateTable = (table, data) => {
     let rowValues = {
       county: element.county,
       cases: element.cases,
-      deaths: element.deaths
+      deaths: element.deaths,
+      perCapita: element.perCapita,
+      population: element.population
     }
 
     for (key in rowValues) {
@@ -148,6 +149,12 @@ const formatDate = (date) => {
   let dates = date.split('-');
   let formattedDate = `${dates[1]}-${dates[2]}`
   return formattedDate;
+}
+
+const sparkLine = () => {
+  $(function() {
+    $(".inlinesparkline").sparkline();
+  });
 }
 
 const getStateChronoData = (totalCountToday) => { 
