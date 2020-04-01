@@ -4,6 +4,7 @@ const axios = require("axios");
 
 const fromNYTimes = ({ state, county }, sendData) => {
   let url = ''
+
   if (county) {
     url = 'https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv'
   } else {

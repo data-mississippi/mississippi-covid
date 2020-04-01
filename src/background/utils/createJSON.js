@@ -32,7 +32,6 @@ const createJSON = (csv, date, state, county, sendData) => {
   } else {
     // i guess this is the callback hell they speak of, i'm not a fan
     csvFilterSort.filter(csv, csvFilterOptions, (error, filteredCSV) => {
-      console.log('filteredCSV', filteredCSV)
       csvToJSON(jsonOptions).fromString(filteredCSV).then((jsonArray) => {
         if (jsonArray.length === 0) {
           sendData('No results found for that query. Please try again.', undefined)
