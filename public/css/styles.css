@@ -74,6 +74,8 @@ footer a {
   display: flex;
   flex-direction: column;
   align-items: center;
+  height: 450px;
+  overflow: scroll;
 }
 
 #counties-header {
@@ -185,4 +187,20 @@ footer a {
 
 #total-count {
   color: rgb(219, 61, 33)
+}
+
+.county-state {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+}
+
+.container {
+  margin-bottom: 30px;
+}
+
+::-webkit-scrollbar {
+  -webkit-appearance: none;
+  width: 7px;
 }

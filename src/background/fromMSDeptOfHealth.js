@@ -22,89 +22,90 @@ const fromMSDeptOfHealth = (query, returnResponse) => {
   })
 }
 
-const countyPopulations = {
-  'Hinds': '241774',
-  'Harrison': '202626',
-  'Desoto': '176132',
-  'Rankin': '151240',
-  'Jackson': '142014',
-  'Madison': '103498',
-  'Lee': '84915',
-  'Lauderdale': '77323',
-  'Forrest': '75517',
-  'Jones': '68454',
-  'Lamar': '61223',
-  'Lowndes': '59437',
-  'PearlRiver': '55149',
-  'Lafayette': '53459',
-  'Oktibbeha': '49481',
-  'Washington': '47086',
-  'Warren': '47075',
-  'Hancock': '46653',
-  'Pike': '39737',
-  'Alcorn': '37180',
-  'Monroe': '35840',
-  'Marshall': '35787',
-  'Lincoln': '34432',
-  'Panola': '34243',
-  'Bolivar': '32592',
-  'Adams': '31547',
-  'Pontotoc': '31315',
-  'Leflore': '29804',
-  'Neshoba': '29376',
-  'Copiah': '28721',
-  'Tate': '28493',
-  'Scott': '28415',
-  'Union': '28356',
-  'Yazoo': '27974',
-  'Simpson': '27073',
-  'Sunflower': '26532',
-  'Prentiss': '25360',
-  'Marion': '25202',
-  'Coahoma': '23802',
-  'George': '23710',
-  'Itawamba': '23480',
-  'Leake': '22870',
-  'Tippah': '21990',
-  'Newton': '21524',
-  'Grenada': '21278',
-  'Wayne': '20422',
-  'Clay': '19808',
-  'Tishomingo': '19478',
-  'Covington': '19091',
-  'Attala': '18581',
-  'Stone': '18375',
-  'Winston': '18358',
-  'Holmes': '18075',
-  'Chickasaw': '17279',
-  'Jasper': '16529',
-  'Smith': '16063',
-  'Clarke': '15928',
-  'Walthall': '14601',
-  'Calhoun': '14571',
-  'Tallahatchie': '14361',
-  'Greene': '13714',
-  'Lawrence': '12630',
-  'Amite': '12468',
-  'Yalobusha': '12421',
-  'Perry': '12028',
-  'JeffersonDavis': '11495',
-  'Noxubee': '10828',
-  'Montgomery': '10198',
-  'Tunica': '10170',
-  'Carroll': '10129',
-  'Kemper': '10107',
-  'Webster': '9828',
-  'Claiborne': '9120',
-  'Wilkinson': '8990',
-  'Humphreys': '8539',
-  'Choctaw': '8321',
-  'Benton': '8253',
-  'Franklin': '7757',
-  'Quitman': '7372',
-  'Jefferson': '7346',
-  'Sharkey': '4511',
-  'Issaquena': '1328'
+const counties = {
+  'Hinds': {population: '241774', id: 'US.MS.049'},
+  'Harrison': {population: '202626', id: 'US.MS.047'},
+  'Desoto': {population: '176132', id: 'US.MS.033'},
+  'Rankin': {population: '151240', id: 'US.MS.121'},
+  'Jackson': {population: '142014', id: 'US.MS.059'},
+  'Madison': {population: '103498', id: 'US.MS.089'},
+  'Lee': {population: '84915', id: 'US.MS.081'},
+  'Lauderdale': {population: '77323', id: 'US.MS.075'},
+  'Forrest': {population: '75517', id: 'US.MS.035'},
+  'Jones': {population: '68454', id: 'US.MS.067'},
+  'Lamar': {population: '61223', id: 'US.MS.073'},
+  'Lowndes': {population: '59437', id: 'US.MS.087'},
+  'PearlRiver': {population: '55149', id: 'US.MS.109'},
+  'Lafayette': {population: '53459', id: 'US.MS.071'},
+  'Oktibbeha': {population: '49481', id: 'US.MS.105'},
+  'Washington': {population: '47086', id: 'US.MS.151'},
+  'Warren': {population: '47075', id: 'US.MS.149'},
+  'Hancock': {population: '46653', id: 'US.MS.045'},
+  'Pike': {population: '39737', id: 'US.MS.113'},
+  'Alcorn': {population: '37180', id: 'US.MS.003'},
+  'Monroe': {population: '35840', id: 'US.MS.095'},
+  'Marshall': {population: '35787', id: 'US.MS.093'},
+  'Lincoln': {population: '34432', id: 'US.MS.085'},
+  'Panola': {population: '34243', id: 'US.MS.107'},
+  'Bolivar': {population: '32592', id: 'US.MS.011'},
+  'Adams': {population: '31547', id: 'US.MS.001'},
+  'Pontotoc': {population: '31315', id: 'US.MS.115'},
+  'Leflore': {population: '29804', id: 'US.MS.083'},
+  'Neshoba': {population: '29376', id: 'US.MS.099'},
+  'Copiah': {population: '28721', id: 'US.MS.029'},
+  'Tate': {population: '28493', id: 'US.MS.137'},
+  'Scott': {population: '28415', id: 'US.MS.123'},
+  'Union': {population: '28356', id: 'US.MS.145'},
+  'Yazoo': {population: '27974', id: 'US.MS.163'},
+  'Simpson': {population: '27073', id: 'US.MS.127'},
+  'Sunflower': {population: '26532', id: 'US.MS.133'},
+  'Prentiss': {population: '25360', id: 'US.MS.117'},
+  'Marion': {population: '25202', id: 'US.MS.091'},
+  'Coahoma': {population: '23802', id: 'US.MS.027'},
+  'George': {population: '23710', id: 'US.MS.039'},
+  'Itawamba': {population: '23480', id: 'US.MS.057'},
+  'Leake': {population: '22870', id: 'US.MS.079'},
+  'Tippah': {population: '21990', id: 'US.MS.139'},
+  'Newton': {population: '21524', id: 'US.MS.101'},
+  'Grenada': {population: '21278', id: 'US.MS.043'},
+  'Wayne': {population: '20422', id: 'US.MS.153'},
+  'Clay': {population: '19808', id: 'US.MS.025'},
+  'Tishomingo': {population: '19478', id: 'US.MS.141'},
+  'Covington': {population: '19091', id: 'US.MS.031'},
+  'Attala': {population: '18581', id: 'US.MS.007'},
+  'Stone': {population: '18375', id: 'US.MS.131'},
+  'Winston': {population: '18358', id: 'US.MS.159'},
+  'Holmes': {population: '18075', id: 'US.MS.051'},
+  'Chickasaw': {population: '17279', id: 'US.MS.017'},
+  'Jasper': {population: '16529', id: 'US.MS.061'},
+  'Smith': {population: '16063', id: 'US.MS.129'},
+  'Clarke': {population: '15928', id: 'US.MS.023'},
+  'Walthall': {population: '14601', id: 'US.MS.147'},
+  'Calhoun': {population: '14571', id: 'US.MS.013'},
+  'Tallahatchie': {population: '14361', id: 'US.MS.135'},
+  'Greene': {population: '13714', id: 'US.MS.041'},
+  'Lawrence': {population: '12630', id: 'US.MS.077'},
+  'Amite': {population: '12468', id: 'US.MS.005'},
+  'Yalobusha': {population: '12421', id: 'US.MS.161'},
+  'Perry': {population: '12028', id: 'US.MS.111'},
+  'JeffersonDavis': {population: '11495', id: 'US.MS.065'},
+  'Noxubee': {population: '10828', id: 'US.MS.103'},
+  'Montgomery': {population: '10198', id: 'US.MS.097'},
+  'Tunica': {population: '10170', id: 'US.MS.143'},
+  'Carroll': {population: '10129', id: 'US.MS.015'},
+  'Kemper': {population: '10107', id: 'US.MS.069'},
+  'Webster': {population: '9828', id: 'US.MS.155'},
+  'Claiborne': {population: '9120', id: 'US.MS.021'},
+  'Wilkinson': {population: '8990', id: 'US.MS.157'},
+  'Humphreys': {population: '8539', id: 'US.MS.053'},
+  'Choctaw': {population: '8321', id: 'US.MS.019'},
+  'Benton': {population: '8253', id: 'US.MS.009'},
+  'Franklin': {population: '7757', id: 'US.MS.037'},
+  'Quitman': {population: '7372', id: 'US.MS.119'},
+  'Jefferson': {population: '7346', id: 'US.MS.063'},
+  'Sharkey': {population: '4511', id: 'US.MS.125'},
+  'Issaquena': {population: '1328', id: 'US.MS.055'},
+  'Total': {population: '0', id: '0'}
 }
 
 const calculatePerCapita = (cases, population) => {
@@ -125,21 +126,26 @@ const parseDOM = (html) => {
   
   for (i = 0; i < tableData.length + 1; i++) {
     if ((i + 1) % 3 == 0) {
+      console.log(tableData[i])
       let countyMap = {
         county: tableData[i - 2],
         cases: tableData[i - 1],
         deaths: tableData[i].length === 0 ? '0' : tableData[i] 
       }
 
-      let countyPopulation = countyPopulations[countyMap.county.replace(/ /g, "")]
-      console.log(countyMap.county)
-      console.log(countyPopulation)
-      let casesPer1000 = calculatePerCapita(countyMap.cases, countyPopulation)
-      console.log(casesPer1000);
+      console.log(countyMap)
 
+      let countyPopulation = counties[countyMap.county.replace(/ /g, "")].population
+      let id = counties[countyMap.county.replace(/ /g, "")].id
+      // console.log(countyMap.county)
+      // console.log(countyPopulation)
+      // console.log(id)
+      let casesPer1000 = calculatePerCapita(countyMap.cases, countyPopulation)
+      // console.log(casesPer1000);
+
+      countyMap.id = id;
       countyMap.population = countyPopulation;
       countyMap.perCapita = casesPer1000;
-
       mississippiCountyCases.push(countyMap);
     }
     

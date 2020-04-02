@@ -53,6 +53,8 @@ const renderTable = (data) => {
 
       let header = data.results.shift();
 
+      createMap(data)
+
       data.results.forEach((county) => {
         let name = county.county
         countyNames.push(name)
@@ -233,41 +235,43 @@ const getStateChronoData = (totalCountToday) => {
             Chartist.plugins.tooltip()
           ]
         });
-
-        // let ctx = stateChart.getContext('2d');
-        // let lineChart = new Chart(ctx, {
-        //   type: 'line',
-        //   data: {
-        //       labels: dayLabels,
-        //       datasets: [{
-        //           label: 'Cases',
-        //           backgroundColor: 'rgb(208, 232, 247)',
-        //           borderColor: 'rgb(51, 90, 161)',
-        //           pointBackgroundColor: 'rgb(51, 90, 161)',
-        //           data: caseCounts
-        //       }, {
-        //         label: 'Deaths',
-        //         backgroundColor: 'rgb(219, 146, 0)',
-        //         borderColor: 'rgb(219, 146, 0)',
-        //         data: deathCounts
-        //       }
-        //     ]
-        //   },
-        //   options: {
-        //     title: {
-        //       display: true,
-        //       text: `Mississippi Covid-19 cases as of ${formatDate(totalCountToday.date)}`,
-        //       fontSize: '18',
-        //       fontFamily: 'Helvetica'
-        //     },
-        //     legend: {
-        //       display: true,
-        //       position: 'bottom'
-        //     }
-            
-        //   }
-        // });
       }
     })
   })
 }
+
+const createMap = function(data) {
+  // create map
+  var map = anychart.map();
+
+  let dataMap = data.results.map((county) => {
+    let countyData = {
+      id: county.id,
+      value: county.cases
+    }
+    return countyData;
+  })
+
+  // create data set
+  var dataSet = anychart.data.set(dataMap);
+
+  // create choropleth series
+  series = map.choropleth(dataSet);
+
+  // set geoIdField to 'id', this field contains in geo data meta properties
+  series.geoIdField('id');
+
+  // set map color settings
+  series.colorScale(anychart.scales.linearColor('#fce4bd', '#c77802'));
+  series.hovered().fill('#addd8e');
+
+  // set geo data, you can find this map in our geo maps collection
+  // https://cdn.anychart.com/#maps-collection
+  map.geoData(anychart.maps['mississippi']);
+
+  //set map container id (div)
+  map.container('container');
+
+  //initiate map drawing
+  map.draw();
+};
