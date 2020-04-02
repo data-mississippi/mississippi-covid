@@ -22,7 +22,6 @@ const getAndRenderMsData = () => {
       let totalCountToday = mississippiCounties.results.pop();
       totalCountToday.date = mississippiCounties.date;
 
-      console.log(totalCountToday)
       status.innerHTML = `${totalCountToday.cases} total COVID-19 cases in Mississippi`
       getStateChronoData(totalCountToday);
 
@@ -91,10 +90,6 @@ const renderTable = (data) => {
           Chartist.plugins.tooltip()
         ]
       });
-
-      let dateHeader = document.createElement('h3')
-      dateHeader.id = 'counties-header'
-      counties.appendChild(dateHeader)
 
       let table = document.createElement('table');
       counties.appendChild(table)
@@ -185,7 +180,6 @@ const getStateChronoData = (totalCountToday) => {
       } else {
         stateData = data.chronological.results;
 
-        console.log(stateData)
         stateData.push(totalCountToday)
 
         let stateDataLength = stateData.length;
@@ -247,31 +241,31 @@ const createMap = function(data) {
   let dataMap = data.results.map((county) => {
     let countyData = {
       id: county.id,
-      value: county.cases
+      value: county.cases,
+      deaths: county.deaths,
+      population: county.population,
+      perCapita: county.perCapita
     }
     return countyData;
   })
 
   // create data set
   var dataSet = anychart.data.set(dataMap);
-
-  // create choropleth series
   series = map.choropleth(dataSet);
 
-  // set geoIdField to 'id', this field contains in geo data meta properties
+  series.tooltip().format(function(e){
+    return "Cases: " + e.getData("value") + "\n"+
+    "Deaths: " + e.getData("deaths") + "\n" +
+    "Population: " + e.getData("population") + "\n" +
+    "Cases per capita: " + e.getData("perCapita") +"\n"
+  });
+
   series.geoIdField('id');
 
-  // set map color settings
   series.colorScale(anychart.scales.linearColor('#fce4bd', '#c77802'));
   series.hovered().fill('#addd8e');
 
-  // set geo data, you can find this map in our geo maps collection
-  // https://cdn.anychart.com/#maps-collection
   map.geoData(anychart.maps['mississippi']);
-
-  //set map container id (div)
   map.container('container');
-
-  //initiate map drawing
   map.draw();
 };

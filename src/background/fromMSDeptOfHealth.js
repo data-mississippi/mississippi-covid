@@ -7,7 +7,7 @@ const fromMSDeptOfHealth = (query, returnResponse) => {
   const date = new Date();
   let dateArray = date.toLocaleDateString('en-US').split('/');
   let formattedDate = `${dateArray[2]}-${dateArray[0]}-${dateArray[1]}`
-  console.log(formattedDate)
+  
   axios.get(url).then((response) => {
     let msCountyCases = parseDOM(response.data);
     const mississippi = {
@@ -105,7 +105,7 @@ const counties = {
   'Jefferson': {population: '7346', id: 'US.MS.063'},
   'Sharkey': {population: '4511', id: 'US.MS.125'},
   'Issaquena': {population: '1328', id: 'US.MS.055'},
-  'Total': {population: '0', id: '0'}
+  'Total': {population: '2987000', id: '0'}
 }
 
 const calculatePerCapita = (cases, population) => {
@@ -126,22 +126,15 @@ const parseDOM = (html) => {
   
   for (i = 0; i < tableData.length + 1; i++) {
     if ((i + 1) % 3 == 0) {
-      console.log(tableData[i])
       let countyMap = {
         county: tableData[i - 2],
-        cases: tableData[i - 1],
+        cases: tableData[i - 1].replace(',', ''),
         deaths: tableData[i].length === 0 ? '0' : tableData[i] 
       }
 
-      console.log(countyMap)
-
       let countyPopulation = counties[countyMap.county.replace(/ /g, "")].population
       let id = counties[countyMap.county.replace(/ /g, "")].id
-      // console.log(countyMap.county)
-      // console.log(countyPopulation)
-      // console.log(id)
       let casesPer1000 = calculatePerCapita(countyMap.cases, countyPopulation)
-      // console.log(casesPer1000);
 
       countyMap.id = id;
       countyMap.population = countyPopulation;
