@@ -125,7 +125,7 @@ const parseDOM = (html) => {
   let keys = tableData.splice(0, 3);
   
   for (i = 0; i < tableData.length + 1; i++) {
-    if ((i + 1) % 3 == 0) {
+    if ((i + 1) % 4 == 0) {
       let countyMap = {
         county: tableData[i - 2],
         cases: tableData[i - 1].replace(',', ''),
