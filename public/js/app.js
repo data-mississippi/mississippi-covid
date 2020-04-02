@@ -2,6 +2,7 @@ const counties = document.getElementById('counties')
 const countiesBarChart = document.getElementById('counties-bar-chart')
 const stateChart = document.getElementById('chrono-chart-state')
 const status = document.getElementById('status')
+const perCapitaState = document.getElementById('per-capita')
 counties.textContent = ''
 
 let mississippiCounties = {}
@@ -21,8 +22,10 @@ const getAndRenderMsData = () => {
       // otherwise this wouldn't be necessary if this came from my own db
       let totalCountToday = mississippiCounties.results.pop();
       totalCountToday.date = mississippiCounties.date;
+      
 
       status.innerHTML = `${totalCountToday.cases} total COVID-19 cases in Mississippi`
+      perCapitaState.innerHTML = `${totalCountToday.perCapita} per 1000 residents`
       getStateChronoData(totalCountToday);
 
       return mississippiCounties;

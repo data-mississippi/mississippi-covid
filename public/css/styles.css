@@ -218,3 +218,7 @@ footer a {
 .anychart-credits-logo {
   display: none
 }
+
+#per-capita {
+  text-align: center;
+}
