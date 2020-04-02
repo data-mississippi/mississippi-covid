@@ -19,31 +19,31 @@
         <p>
           During the process of compiling this data, we've found that a lot of different sources conflict each other. 
           We aim to overcome these discrepancies by sharing as many sources as possible. 
-          We're constantly adding new data sources, so check back here for any additions to our list.
+          We're working on adding new data sources, so check back here for any additions to our list.
           We also keep <a href="/api/v1/docs" target="_blank">the api documentation</a> up-to-date. 
         </p>
         <p>
           Data is currently available from three sources: 
             <ol>
               <li><strong>Mississippi State Department of Health</strong></li>
-                <p>We've found that MSDH has the most up-to-date numbers than anybody, so we constantly scrape for updates. 
-                  That API is still being refined and it has no documentation, but if you want to try it out, you can get from
-                  the <code>/mississippi</code> endpoint.</p>
-                <p>Checkout <a href="https://msdh.ms.gov/msdhsite/_static/14,0,420.html">their website</a> for some more data.</p>
+                <p>We've found that MSDH has the most up-to-date numbers than anybody, so we constantly scrape their website for updates. 
+                  The API is still being refined and it has no documentation, but if you want to try it out, you can <code>get</code> from
+                  the <code>/api/v1/mississippi</code> endpoint.</p>
+                <p>Check out <a href="https://msdh.ms.gov/msdhsite/_static/14,0,420.html">their website</a> for some more interesting data which isn't included here.</p>
+              <li><strong>The New York Times</strong></li>
+                <p>Their data is a chronological list of case counts for each day, since the first confirmed case in the United States. 
+                  This is a good endpoint to query if you want to make data charts for growth rates based counties and states.
+                </p>
+                <p><i>New York Times</i> updates their data daily. It's sourced <a href="https://github.com/nytimes/covid-19-data">from here.</a></p>
               <li><strong>Johns Hopkins University</strong></li>
                 <p>
                   This data provides a snapshot of each day's cases, based on county and state. Note that they didn't start sharing county data until 03-23-2020.
+                  And they stopped the county data on 04-01-2020.
                 </p>
                 <p>
                   Johns Hopkins updates their data everyday at 23:59 UTC (7pm central time). We query the most recent data.
                   It comes <a href="https://github.com/CSSEGISandData/COVID-19" target="_blank">from here.</a>
                 </p>
-              <li><strong>The New York Times</strong></li>
-                <p>Their data is a chronological list of case counts for each day, since the first confirmed case in January. 
-                  This is a good endpoint to query if you want to make data charts to see growth rates based counties and states.
-                </p>
-                <p>New York Times updates their data daily. It's sourced <a href="https://github.com/nytimes/covid-19-data">from here.</a></p>
-              
             </ol> 
         </p>
         <p>
