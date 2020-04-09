@@ -36,6 +36,7 @@ const counties = {
   'Lamar': {population: '61223', id: 'US.MS.073'},
   'Lowndes': {population: '59437', id: 'US.MS.087'},
   'PearlRiver': {population: '55149', id: 'US.MS.109'},
+  'KepearlRiver': {population: '55149', id: 'US.MS.109'},
   'Lafayette': {population: '53459', id: 'US.MS.071'},
   'Oktibbeha': {population: '49481', id: 'US.MS.105'},
   'Washington': {population: '47086', id: 'US.MS.151'},
@@ -135,6 +136,10 @@ const parseDOM = (html) => {
       let countyPopulation = counties[countyMap.county.replace(/ /g, "")].population
       let id = counties[countyMap.county.replace(/ /g, "")].id
       let casesPer1000 = calculatePerCapita(countyMap.cases, countyPopulation)
+
+      console.log(countyMap)
+
+
 
       countyMap.id = id;
       countyMap.population = countyPopulation;
