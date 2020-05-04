@@ -126,18 +126,21 @@ const parseDOM = (html) => {
   let keys = tableData.splice(0, 3);
   
   for (i = 0; i < tableData.length + 1; i++) {
-    if ((i + 1) % 4 == 0) {
+    if ((i + 1) % 5 == 0) {
+      console.log(tableData)
       let countyMap = {
         county: tableData[i - 2],
         cases: tableData[i - 1].replace(',', ''),
         deaths: tableData[i].length === 0 ? '0' : tableData[i] 
       }
 
+      console.log(countyMap)
+
       let countyPopulation = counties[countyMap.county.replace(/ /g, "")].population
       let id = counties[countyMap.county.replace(/ /g, "")].id
       let casesPer1000 = calculatePerCapita(countyMap.cases, countyPopulation)
 
-      console.log(countyMap)
+      
 
 
 
