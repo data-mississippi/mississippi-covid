@@ -10,35 +10,45 @@ let mississippiCounties = {}
 const getAndRenderMsData = () => {
   status.innerHTML = 'loading...'
 
-  fetch('api/v1/mississippi').then((response) => {
-    response.json().then((data) => {
-      return data;
-    }).then((data) => {
-      mississippiCounties = data;
-
-      // get the last item in today's count 
-      // to merge with chrono data. i'm getting today's
-      // count from ms dept of health and chrono from nytimes,
-      // otherwise this wouldn't be necessary if this came from my own db
-      let totalCountToday = mississippiCounties.results.pop();
-      totalCountToday.date = mississippiCounties.date;
-      
-
-      status.innerHTML = `${totalCountToday.cases} total COVID-19 cases in Mississippi`
-      perCapitaState.innerHTML = `${totalCountToday.perCapita} per 1000 residents`
-      getStateChronoData(totalCountToday);
-
-      return mississippiCounties;
-    }).then((data) => {
-      renderTable(data)
+  try {
+    fetch('api/v1/mississippi').then((response) => {
+      response.json().then((data) => {
+        console.log('data', data)
+        return data;
+      }).then((data) => {
+        mississippiCounties = data;
+  
+        // get the last item in today's count 
+        // to merge with chrono data. i'm getting today's
+        // count from ms dept of health and chrono from nytimes,
+        // otherwise this wouldn't be necessary if this came from my own db
+        let totalCountToday = mississippiCounties.results.pop();
+        console.log(mississippiCounties.date)
+        totalCountToday.date = mississippiCounties.date;
+        
+  
+        status.innerHTML = `${totalCountToday.cases} total COVID-19 cases in Mississippi`
+        perCapitaState.innerHTML = `${totalCountToday.perCapita} per 1000 residents`
+        getStateChronoData(totalCountToday);
+  
+        return mississippiCounties;
+      }).then((data) => {
+        renderTable(data)
+      })
+    }).catch(error => {
+      console.log(error)
+      loading.innerHTML = ''
+      counties.innerHTML = ''
+      stateChart.innerHTML = data.error;
+      counties.innerHTML = data.error;
+      console.log(error);
     })
-  }).catch(error => {
-    loading.innerHTML = ''
-    counties.innerHTML = ''
-    stateChart.innerHTML = data.error;
-    counties.innerHTML = data.error;
-    console.log(error);
-  })
+
+  } catch(error) {
+    console.log(error)
+    loading.innerHTML = 'An error occured.'
+  }
+  
 }
 
 const renderTable = (data) => {
