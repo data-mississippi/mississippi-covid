@@ -25,7 +25,7 @@ const fromMSDeptOfHealth = (query, returnResponse) => {
 const counties = {
   'Hinds': {population: '241774', id: 'US.MS.049'},
   'Harrison': {population: '202626', id: 'US.MS.047'},
-  'Desoto': {population: '176132', id: 'US.MS.033'},
+  'DeSoto': {population: '176132', id: 'US.MS.033'},
   'Rankin': {population: '151240', id: 'US.MS.121'},
   'Jackson': {population: '142014', id: 'US.MS.059'},
   'Madison': {population: '103498', id: 'US.MS.089'},
@@ -134,22 +134,15 @@ const parseDOM = (html) => {
         deaths: tableData[i].length === 0 ? '0' : tableData[i] 
       }
 
-      console.log(countyMap)
-
       let countyPopulation = counties[countyMap.county.replace(/ /g, "")].population
       let id = counties[countyMap.county.replace(/ /g, "")].id
       let casesPer1000 = calculatePerCapita(countyMap.cases, countyPopulation)
-
-      
-
-
 
       countyMap.id = id;
       countyMap.population = countyPopulation;
       countyMap.perCapita = casesPer1000;
       mississippiCountyCases.push(countyMap);
     }
-    
   }
 
 
