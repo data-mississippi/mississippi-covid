@@ -123,11 +123,11 @@ const parseDOM = (html) => {
     tableData.push($(elem).text())
   })
 
+  // splice a table row into an array of three to map to
   let keys = tableData.splice(0, 3);
   
   for (i = 0; i < tableData.length + 1; i++) {
     if ((i + 1) % 5 == 0) {
-      console.log(tableData)
       let countyMap = {
         county: tableData[i - 2],
         cases: tableData[i - 1].replace(',', ''),
@@ -144,8 +144,6 @@ const parseDOM = (html) => {
       mississippiCountyCases.push(countyMap);
     }
   }
-
-
 
   return mississippiCountyCases;
 }
