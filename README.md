@@ -1,5 +1,5 @@
 # mississippicovid.com
-
+This website [is deployed here](https://mississippicovid.com).
 ---
 ## Requirements
 For development, you only need Node.js installed on your machine. npm is the package manager and it comes with Node.
